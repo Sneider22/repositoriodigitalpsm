@@ -115,7 +115,7 @@ const Auth = () => {
             .from('profiles')
             .upsert({
               id: user.id,
-              fullname: formData.fullName,
+              full_name: formData.fullName,
               career: formData.career,
               location: formData.location,
               role: 'student'
