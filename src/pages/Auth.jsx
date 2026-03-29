@@ -110,18 +110,8 @@ const Auth = () => {
         });
         if (error) throw error;
 
-        if (user) {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert({
-              id: user.id,
-              full_name: formData.fullName,
-              career: formData.career,
-              location: formData.location,
-              role: 'student'
-            });
-          if (profileError) throw profileError;
-        }
+        // El perfil ahora se crea automáticamente en la base de datos mediante el Trigger SQL,
+        // por lo que ya no intentaremos hacer upsert desde el frontend.
 
         alert("¡Registro exitoso! Ya puedes iniciar sesión.");
         setIsLogin(true);
