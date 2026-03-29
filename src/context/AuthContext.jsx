@@ -86,12 +86,31 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = async () => {
     try {
+      // 1. Limpiar estados de React inmediatamente
+      setUser(null);
+      setProfile(null);
+      
+      // 2. Intentar cierre de sesión oficial en el servidor
       await supabase.auth.signOut();
     } catch (err) {
       console.error("Error en signOut:", err);
+    } finally {
+      // 3. LIMPIEZA FORZOSA: Borrar tokens de Supabase del localStorage 
+      // Esto evita el bucle si el token expiró en el servidor pero sigue en el navegador
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('sb-')) {
+            localStorage.removeItem(key);
+          }
+        }
+      } catch (e) {
+        console.error("Error limpiando localStorage", e);
+      }
+      
+      // 4. Redirigir limpiamente sin afectar el historial
+      window.location.replace('/');
     }
-    // Siempre redirigir, aunque haya error
-    window.location.href = '/';
   };
 
   return (
