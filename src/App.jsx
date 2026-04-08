@@ -31,15 +31,6 @@ const ScrollToTop = () => {
 const AppContent = () => {
   const { loading } = useAuth();
   
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-primary-600 animate-spin" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Cargando repositorio...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col font-sans transition-colors duration-200">
       <Navbar />

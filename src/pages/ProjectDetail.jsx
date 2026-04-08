@@ -5,201 +5,12 @@ import {
   Layers, ChevronRight, File, Package, Clock, X, ChevronLeft
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-
-// Data mock completa para buscar por slug
-const mockProjects = [
-  {
-    id: 1,
-    slug: "diseno-sistema-estructural-sismorresistente",
-    titulo: "Diseño de un Sistema Estructural Sismorresistente para Edificios Multifamiliares",
-    descripcion: "Análisis exhaustivo y diseño tridimensional de un sistema estructural en concreto armado capaz de resistir cargas sísmicas medias y altas en la zona oriental de Venezuela. Incorpora normativas COVENIN vigentes y modelado en software especializado.",
-    carrera: "Ingeniería Civil",
-    semestre: "10mo Semestre",
-    ano_publicacion: "2023",
-    sede: "Extensión Porlamar",
-    tipo: "Trabajo de Grado",
-    autores: ["Carlos Mendoza", "Ana Ruiz"],
-    profesor: "Ing. Roberto Méndez",
-    fecha_publicacion: "12 de Octubre, 2023",
-    linea_investigacion: "Estructuras y Sismología",
-    palabras_clave: ["Sismorresistente", "Concreto Armado", "Edificios", "COVENIN"],
-    galeria: [
-      "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Memoria_Calculo.pdf", tipo: "pdf", peso: "8.5 MB" },
-      { nombre: "Planos_Estructurales.dwg", tipo: "cad", peso: "22.1 MB" }
-    ]
-  },
-  {
-    id: 2,
-    slug: "prototipo-app-movil-inventarios-clinicos",
-    titulo: "Prototipo de Aplicación Móvil para la Gestión de Inventarios Clínicos",
-    descripcion: "Desarrollo de una app móvil progresiva usando React Native y Supabase para el control del almacén del Instituto de Salud local, logrando eficientizar tiempos en un 40%. La solución incluye escaneo de códigos de barras y alertas en tiempo real.",
-    carrera: "Ingeniería de Sistemas",
-    semestre: "8vo Semestre",
-    ano_publicacion: "2024",
-    sede: "Sede Principal Barcelona",
-    tipo: "Por Asignatura",
-    autores: ["Luis Fermín"],
-    profesor: "MSc. Juan Pérez",
-    fecha_publicacion: "05 de Marzo, 2024",
-    linea_investigacion: "Desarrollo de Software e IA",
-    palabras_clave: ["Mobile", "React Native", "Inventario", "Salud"],
-    galeria: [
-      "https://images.unsplash.com/photo-1551288049-bbbda536339a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Codigo_Fuente.zip", tipo: "zip", peso: "12.4 MB" },
-      { nombre: "Manual_Usuario.pdf", tipo: "pdf", peso: "1.2 MB" }
-    ]
-  },
-  {
-    id: 3,
-    slug: "plan-mantenimiento-preventivo-bombas-industriales",
-    titulo: "Plan Estandarizado de Mantenimiento Preventivo para Bombas Industriales",
-    descripcion: "Propuesta de un manual operativo de mantenimiento mecánico predictivo y preventivo diseñado para turbinas y bombas centrífugas en la industria del gas y el petróleo. Incluye análisis de vibraciones y termografía.",
-    carrera: "Ing. de Mantenimiento Mecánico",
-    semestre: "9no Semestre",
-    ano_publicacion: "2023",
-    sede: "Extensión Maracaibo",
-    tipo: "Pasantía",
-    autores: ["Miguel Rivas"],
-    profesor: "Ing. Carlos Govea",
-    fecha_publicacion: "20 de Agosto, 2023",
-    linea_investigacion: "Mantenimiento Industrial",
-    palabras_clave: ["Mantenimiento", "Bombas", "Industria", "Petróleo"],
-    galeria: [
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Plan_Mantenimiento.pdf", tipo: "pdf", peso: "3.8 MB" }
-    ]
-  },
-  {
-    id: 4,
-    slug: "restauracion-modernizacion-arquitectonica-casco-historico",
-    titulo: "Restauración y Modernización Arquitectónica del Casco Histórico",
-    descripcion: "Proyecto urbanístico, paisajista y sociológico para restaurar los espacios públicos de la Plaza Central, incorporando jardines autosustentables e iluminación solar. Se enfoca en la preservación del patrimonio colonial.",
-    carrera: "Arquitectura",
-    semestre: "10mo Semestre",
-    ano_publicacion: "2024",
-    sede: "Extensión Caracas",
-    tipo: "Trabajo de Grado",
-    autores: ["Elena Suárez"],
-    profesor: "Arq. Mario Rossi",
-    fecha_publicacion: "10 de Enero, 2024",
-    linea_investigacion: "Urbanismo y Patrimonio",
-    palabras_clave: ["Arquitectura", "Patrimonio", "Sustentable", "Urbanismo"],
-    galeria: [
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Propuesta_Urbana.pdf", tipo: "pdf", peso: "15.0 MB" },
-      { nombre: "Modelado_3D.obj", tipo: "3d", peso: "85.0 MB" }
-    ]
-  },
-  {
-    id: 5,
-    slug: "diseno-complejo-turistico-ecologico-costero",
-    titulo: "Diseño de un Complejo Turístico Ecológico Integrado al Entorno Costero",
-    descripcion: "Este proyecto propone una solución arquitectónica sustentable orientada al desarrollo turístico en la zona costera oriental. Mediante la utilización de materiales endémicos como el bambú y la madera certificada, el complejo busca reducir la huella de carbono al mínimo. Incorpora sistemas pasivos de climatización, reutilización de aguas pluviales y generación de energía solar, creando una armonía perfecta entre el confort moderno y el ecosistema natural protector de los manglares.",
-    carrera: "Arquitectura",
-    semestre: "10mo Semestre",
-    ano_publicacion: "2023",
-    sede: "Extensión Porlamar",
-    tipo: "Trabajo de Grado",
-    autores: ["Marcos Torres", "Lucía Peña"],
-    profesor: "Arq. Hernán Cortés",
-    fecha_publicacion: "15 de Noviembre, 2023",
-    linea_investigacion: "Diseño Arquitectónico Sustentable",
-    palabras_clave: ["Ecoturismo", "Climatización Pasiva", "Bambú", "Desarrollo Costero", "Bioclimática"],
-    galeria: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Memoria_Descriptiva.pdf", tipo: "pdf", peso: "4.2 MB" },
-      { nombre: "Planos_Estructurales.dwg", tipo: "cad", peso: "15.8 MB" },
-      { nombre: "Renders_Alta_Resolucion.rar", tipo: "rar", peso: "145.0 MB" },
-      { nombre: "Base_De_Datos_Ambiental.sql", tipo: "sql", peso: "350 KB" },
-      { nombre: "Estilos_Presentacion.css", tipo: "css", peso: "12 KB" },
-      { nombre: "Fachada_Principal.png", tipo: "img", peso: "2.1 MB" },
-      { nombre: "Modelo_3D_Maqueta.obj", tipo: "3d", peso: "54.1 MB" }
-    ]
-  },
-  {
-    id: 6,
-    slug: "centro-cultural-biblioteca-publica-diseno-parametrico",
-    titulo: "Centro Cultural y Biblioteca Pública con Diseño Paramétrico",
-    descripcion: "Diseño de un recinto público enfocado en la difusión cultural, utilizando herramientas de diseño arquitectónico generativo para optimizar iluminación natural y acústica.",
-    carrera: "Arquitectura",
-    semestre: "9no Semestre",
-    ano_publicacion: "2024",
-    sede: "Extensión Mérida",
-    tipo: "Por Asignatura",
-    autores: ["Valeria Guzmán"],
-    profesor: "Arq. Luis Salas",
-    fecha_publicacion: "22 de Febrero, 2024",
-    linea_investigacion: "Arquitectura Biomimética",
-    palabras_clave: ["Paramétrico", "Biblioteca", "Cultura", "Acústica"],
-    galeria: [
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Proyecto_Parametrico.pdf", tipo: "pdf", peso: "9.7 MB" }
-    ]
-  },
-  {
-    id: 7,
-    slug: "viviendas-interes-social-modulares-expandibles",
-    titulo: "Viviendas de Interés Social Modulares y Expandibles",
-    descripcion: "Alternativa habitacional de bajo costo diseñada bajo un esquema arquitectónico modular que permite crecimiento ordenado según las necesidades del grupo familiar.",
-    carrera: "Arquitectura",
-    semestre: "10mo Semestre",
-    ano_publicacion: "2023",
-    sede: "Extensión Valencia",
-    tipo: "Trabajo de Grado",
-    autores: ["Simón Andrade"],
-    profesor: "Arq. Claudia Martínez",
-    fecha_publicacion: "30 de Junio, 2023",
-    linea_investigacion: "Vivienda Social",
-    palabras_clave: ["Vivienda", "Modular", "Interés Social", "Costos"],
-    galeria: [
-      "https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Diseño_Modular.pdf", tipo: "pdf", peso: "5.5 MB" }
-    ]
-  },
-  {
-    id: 8,
-    slug: "intervencion-paisajismo-zonas-universitarias",
-    titulo: "Intervención de Paisajismo en Zonas Universitarias Deterioradas",
-    descripcion: "Recuperación de espacios verdes dentro del campus universitario promoviendo senderos bioclimáticos, áreas de estudio al aire libre y reforestación.",
-    carrera: "Arquitectura",
-    semestre: "8vo Semestre",
-    ano_publicacion: "2024",
-    sede: "Sede Principal Barcelona",
-    tipo: "Servicio Comunitario",
-    autores: ["Ricardo Silva"],
-    profesor: "Ing. Beatriz Díaz",
-    fecha_publicacion: "14 de Abril, 2024",
-    linea_investigacion: "Paisajismo Urbano",
-    palabras_clave: ["Paisajismo", "Universidad", "Ecológico", "Campus"],
-    galeria: [
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Informe_Servicio.pdf", tipo: "pdf", peso: "2.8 MB" }
-    ]
-  }
-];
+import { supabase } from '../lib/supabase';
+import { mockProjects } from '../data/mockProjects';
 
 // Utilidad para extraer ícono visual basado en el tipo de archivo
 const getFileIcon = (tipo) => {
-  switch(tipo) {
+  switch(tipo?.toLowerCase()) {
     case 'pdf': return <FileText className="w-7 h-7 text-red-500" />;
     case 'sql': return <Database className="w-7 h-7 text-purple-500" />;
     case 'css': return <FileCode className="w-7 h-7 text-blue-500" />;
@@ -207,7 +18,8 @@ const getFileIcon = (tipo) => {
     case 'zip': return <Archive className="w-7 h-7 text-amber-500" />;
     case 'img': 
     case 'png':
-    case 'jpg': return <ImagePlus className="w-7 h-7 text-green-500" />;
+    case 'jpg':
+    case 'jpeg': return <ImagePlus className="w-7 h-7 text-green-500" />;
     case 'cad':
     case 'dwg': return <Layers className="w-7 h-7 text-indigo-500" />;
     case '3d':
@@ -216,12 +28,100 @@ const getFileIcon = (tipo) => {
   }
 };
 
+const diccionarios = {
+  carreras: { civil: "Ingeniería Civil", sistemas: "Ingeniería de Sistemas", mantenimiento: "Ing. de Mantenimiento Mecánico", arquitectura: "Arquitectura", electrica: "Ing. Eléctrica", electronica: "Ing. Electrónica", industrial: "Ing. Industrial", telecomunicaciones: "Ing. en Telecomunicaciones", quimica: "Ing. Química", petroleo: "Ing. de Petroleo", agronomica: "Ing. Agronómica", diseno: "Ing. en Diseño Industrial" },
+  sedes: { barcelona: "Sede Barcelona", valencia: "Ext. Valencia", cabimas: "Ext. Cabimas", maracaibo: "Ext. Maracaibo", caracas: "Ext. Caracas", merida: "Ext. Mérida", sancristobal: "Ext. San Cristóbal", barinas: "Ext. Barinas", maracay: "Ext. Maracay", porlamar: "Ext. Porlamar", puertoordaz: "Ext. Puerto Ordaz", maturin: "Ext. Maturín", ciudadojeda: "Ext. Ciudad Ojeda" },
+  tipos: { grado: "Trabajo de Grado", investigacion: "Proyecto de Investigación", pasantia: "Pasantías", comunitario: "Servicio Comunitario", materia: "Proyecto de Materia" }
+};
+
 const ProjectDetail = () => {
   const { slug } = useParams();
   const [activeImageIndex, setActiveImageIndex] = useState(null);
   
-  // Buscar el proyecto por slug
-  const project = mockProjects.find(p => p.slug === slug);
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Buscar el proyecto por ID/slug a la base de datos o en los mocks locales
+  useEffect(() => {
+    const fetchProject = async () => {
+      setLoading(true);
+
+      // 1. Primero buscar en mockProjects (por si el slug coincide con uno de los ejemplos)
+      const localMock = mockProjects.find((p) => p.slug === slug);
+      if (localMock) {
+        setProject(localMock);
+        setLoading(false);
+        return; // Salimos temprano y no consultamos Supabase
+      }
+
+      // 2. Si no está en los locales, intentar buscar el UUID en Supabase
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select(`
+            *,
+            career:career_id(name_career),
+            location:location_id(name_location),
+            profiles:user_id(full_name)
+          `)
+          .eq('id', slug)
+          .single();
+          
+        if (error) throw error;
+        
+        if (data) {
+          // Extraer imágenes y otros archivos
+          const isImage = (fmt) => ['png','jpg','jpeg','webp','gif','svg'].includes(fmt?.toLowerCase());
+          const parseExt = (name) => name?.split('.').pop()?.toLowerCase();
+          
+          let galeria = [];
+          let archivos = [];
+          
+          if (data.file_urls) {
+            data.file_urls.forEach(file => {
+               const ext = parseExt(file.name);
+               if (isImage(ext)) {
+                 galeria.push(file.url);
+               } else {
+                 archivos.push({
+                   nombre: file.name,
+                   tipo: ext || 'doc',
+                   peso: (file.size / 1024 / 1024).toFixed(2) + ' MB',
+                   url: file.url
+                 });
+               }
+            });
+          }
+
+          setProject({
+            id: data.id,
+            slug: data.id,
+            titulo: data.title,
+            descripcion: data.description,
+            carrera: data.career?.name_career || 'Carrera no especificada',
+            semestre: `${data.semester}° Semestre`,
+            ano_publicacion: data.date_published ? new Date(data.date_published).getFullYear().toString() : 'Reciente',
+            sede: data.location?.name_location || 'Sede no especificada',
+            tipo: diccionarios.tipos[data.project_type] || data.project_type,
+            autores: [data.profiles?.full_name || 'Autor Desconocido'],
+            profesor: data.professor_name || 'No especificado',
+            fecha_publicacion: data.date_published || 'Reciente',
+            linea_investigacion: data.subject || 'Línea de Vida Académica',
+            palabras_clave: data.keywords || [],
+            galeria: galeria,
+            archivos: archivos,
+            enlace_online: data.external_link
+          });
+        }
+      } catch (err) {
+        console.error("Error al obtener detalle del proyecto:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProject();
+  }, [slug]);
 
   // Manejador para abrir el lightbox y meter un estado en el historial
   const openLightbox = (index) => {
@@ -266,10 +166,19 @@ const ProjectDetail = () => {
     setActiveImageIndex((prev) => (prev - 1 + project.galeria.length) % project.galeria.length);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Cargando proyecto...</h1>
+      </div>
+    );
+  }
+
   if (!project) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Proyecto no encontrado</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Proyecto no encontrado o Pendiente de Aprobación</h1>
         <Link to="/repositorios" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">
           Volver a repositorios
         </Link>
@@ -472,9 +381,15 @@ const ProjectDetail = () => {
                     </div>
 
                     {/* Botón Descarga */}
-                    <button className="bg-white dark:bg-gray-950 hover:bg-primary-50 text-primary-600 dark:text-primary-400 border border-gray-200 dark:border-gray-700 font-bold px-4 py-1.5 rounded-lg text-xs transition-colors shadow-sm whitespace-nowrap self-end sm:self-center">
-                      Descargar
-                    </button>
+                    {file.url ? (
+                      <a href={file.url} target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-gray-950 hover:bg-primary-50 text-primary-600 dark:text-primary-400 border border-gray-200 dark:border-gray-700 font-bold px-4 py-1.5 rounded-lg text-xs transition-colors shadow-sm whitespace-nowrap self-end sm:self-center">
+                        Descargar
+                      </a>
+                    ) : (
+                      <button className="bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold px-4 py-1.5 rounded-lg text-xs cursor-not-allowed whitespace-nowrap self-end sm:self-center">
+                        No disponible
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>

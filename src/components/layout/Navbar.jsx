@@ -90,7 +90,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-end">
                   <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">{profile?.role || 'USUARIO'}</span>
                   <span className="text-sm font-bold text-gray-900 dark:text-white leading-none">
-                    {profile?.full_name?.split(' ')[0] || 'Hola'}
+                    {profile?.full_name?.split(' ')[0] || 'Usuario'}
                   </span>
                 </div>
                 <button 
@@ -133,9 +133,9 @@ const Navbar = () => {
               Navegación
             </h2>
             <div className="flex flex-col gap-8">
-              <Link to="/" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Inicio</Link>
-              <Link to="/repositorios" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Repositorios</Link>
-              <Link to="/info" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Información</Link>
+              <Link to="/" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Inicio</Link>
+              <Link to="/repositorios" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Repositorios</Link>
+              <Link to="/info" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Información</Link>
             </div>
             
             <div className="mt-auto pt-8 border-t border-gray-100 dark:border-gray-800">
