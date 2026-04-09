@@ -1,202 +1,78 @@
 export const mockProjects = [
   {
     id: "mock-1",
-    slug: "diseno-sistema-estructural-sismorresistente",
-    titulo: "Diseño de un Sistema Estructural Sismorresistente para Edificios Multifamiliares",
-    descripcion: "Análisis exhaustivo y diseño tridimensional de un sistema estructural en concreto armado capaz de resistir cargas sísmicas medias y altas en la zona oriental de Venezuela. Incorpora normativas COVENIN vigentes y modelado en software especializado.",
-    carrera: "Ingeniería Civil", carrera_id: "civil",
-    semestre: "10mo Semestre", semestre_id: "10",
+    slug: "diseno-mercado-municipal-arquitectura",
+    titulo: "Diseño de un Mercado Municipal",
+    descripcion: "El trabajo consistió en la elaboración integral de planos arquitectónicos para un mercado municipal. Se utilizó una metodología de representación bidimensional y tridimensional para visualizar el procedimiento de diseño y construcción. La creación de los planos y la documentación técnica se realizó mediante software especializado, incluyendo AutoCAD (para dibujo técnico detallado) y Revit (para modelado de información de construcción - BIM). Además, se complementó el proyecto con la construcción de una maqueta física, que sirvió como simulación tridimensional para una mejor comprensión espacial y visualización del diseño propuesto.",
+    carrera: "Arquitectura", carrera_id: "arquitectura",
+    semestre: "6to Semestre", semestre_id: "6",
     ano_publicacion: "2023",
-    sede: "Extensión Porlamar", sede_id: "porlamar",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    autores: ["Carlos Mendoza", "Ana Ruiz"], autor: "Carlos Mendoza & Ana Ruiz",
-    profesor: "Ing. Roberto Méndez",
+    sede: "Extensión Caracas", sede_id: "caracas",
+    tipo: "Asignación Académica", tipo_id: "materia",
+    autores: ["Sofia Sanchez"], autor: "Sofia Sanchez",
+    profesor: "Arq. Carlos Peréz",
     fecha_publicacion: "12 de Octubre, 2023",
-    linea_investigacion: "Estructuras y Sismología",
-    palabras_clave: ["Sismorresistente", "Concreto Armado", "Edificios", "COVENIN"],
+    linea_investigacion: "Diseño Arquitectónico VI",
+    palabras_clave: ["Diseño Arquitectónico", "Mercado Municipal", "Arquitectura", "Planos", "Render"],
     score: 98, vistas: 342, descargas: 125,
     status: "published",
     galeria: [
-      "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      "https://i.ibb.co/pvN0psfY/rampa-principal.png", "https://i.ibb.co/WWFys7S8/entrada-principal-4.png", "https://i.ibb.co/W4kFbrSW/entrada-principal-3.png", "https://i.ibb.co/bj816pzv/entrada-principal-2.png", "https://i.ibb.co/CKyjkDhd/entrada-principal.png", "https://i.ibb.co/mVFmF3x3/mercado-municipal.png"
     ],
     archivos: [
-      { nombre: "Memoria_Calculo.pdf", tipo: "pdf", peso: "8.5 MB" },
-      { nombre: "Planos_Estructurales.dwg", tipo: "cad", peso: "22.1 MB" }
+      { nombre: "Mercado Municipal Sofia Sanchez - Entrega Final.pdf", tipo: "pdf", peso: "43.5 MB", url: "https://drive.google.com/file/d/1CdzWc0luNly9yzsNwxW8-_T31UA85Qw1/view?usp=drivesdk" },
+      { nombre: "mercado municipal.dwg", tipo: "dwg", peso: "5.4 MB", url: "https://drive.google.com/file/d/1iL7CxXVwoM4lyLdhIZzZgogJVGBL1xJ0/view?usp=drivesdk" },
+      { nombre: "mercado municipal.rvt", tipo: "rvt", peso: "28.9 MB", url: "https://drive.google.com/file/d/1WE45ydt7GpdlzXn55TImcJTSZJnFRUl4/view?usp=drivesdk" }
     ]
   },
   {
     id: "mock-2",
-    slug: "prototipo-app-movil-inventarios-clinicos",
-    titulo: "Prototipo de Aplicación Móvil para la Gestión de Inventarios Clínicos",
-    descripcion: "Desarrollo de una app móvil progresiva usando React Native y Supabase para el control del almacén del Instituto de Salud local, logrando eficientizar tiempos en un 40%. La solución incluye escaneo de códigos de barras y alertas en tiempo real.",
+    slug: "simulacion-sistema-oscilatorio",
+    titulo: "Simulación de Sistema Oscilatorio",
+    descripcion: "El proyecto consistió en el desarrollo de un Simulador Web Interactivo de un Oscilador Armónico Simple (masa y resorte), utilizando HTML, CSS y JavaScript como tecnologías principales. Un oscilador armónico simple es un sistema físico fundamental donde una masa conectada a un resorte genera un movimiento oscilatorio periódico, esencial en física e ingeniería. El simulador permite a los usuarios modificar parámetros clave como la masa, la constante del resorte, la elongación y la velocidad inicial. Su característica principal es la visualización y análisis en tiempo real del comportamiento del sistema. Esto se logra mediante gráficos dinámicos (implementados con Chart.js) que representan la evolución de la elongación, velocidad, aceleración, fuerza y la energía total del sistema. Además de los controles de parámetros y los botones de control (iniciar, pausar, reiniciar), el simulador incorpora un diseño responsivo (adaptable a diferentes dispositivos) y funciones de usabilidad como un selector de modo claro/oscuro. El objetivo es facilitar el análisis rápido y el aprendizaje del movimiento armónico simple.",
     carrera: "Ingeniería de Sistemas", carrera_id: "sistemas",
-    semestre: "8vo Semestre", semestre_id: "8",
+    semestre: "7mo Semestre", semestre_id: "7",
     ano_publicacion: "2024",
-    sede: "Sede Principal Barcelona", sede_id: "barcelona",
-    tipo: "Proyecto de Materia", tipo_id: "materia",
-    autores: ["Luis Fermín"], autor: "Luis Fermín",
-    profesor: "MSc. Juan Pérez",
-    fecha_publicacion: "05 de Marzo, 2024",
-    linea_investigacion: "Desarrollo de Software e IA",
-    palabras_clave: ["Mobile", "React Native", "Inventario", "Salud"],
+    sede: "Extensión Caracas", sede_id: "caracas",
+    tipo: "Asignación Académica", tipo_id: "materia",
+    autores: ["Sneider Araque"], autor: "Sneider Araque",
+    profesor: "Ing. Roger Hau",
+    fecha_publicacion: "02 de Julio, 2024",
+    linea_investigacion: "Simulación Digital",
+    palabras_clave: ["Simulación", "Física", "Oscilador Armónico Simple", "JavaScript"],
     score: 92, vistas: 210, descargas: 45,
     status: "published",
+    enlace_online: "https://simulacion-dig.vercel.app/",
     galeria: [
-      "https://images.unsplash.com/photo-1551288049-bbbda536339a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      "https://i.ibb.co/s9KmZBGP/fuerza.jpg", "https://i.ibb.co/zWCcz6TC/aceleracion.jpg", "https://i.ibb.co/fGnGWJT9/energia-1.jpg", "https://i.ibb.co/35kbzXMz/velocidad.jpg", "https://i.ibb.co/ymC1HkHs/elongacion.jpg"
     ],
     archivos: [
-      { nombre: "Codigo_Fuente.zip", tipo: "zip", peso: "12.4 MB" },
-      { nombre: "Manual_Usuario.pdf", tipo: "pdf", peso: "1.2 MB" }
+      { nombre: "simulacion-dig-sneider-araque.zip", tipo: "zip", peso: "259.1 KB", url: "https://drive.google.com/file/d/19yjQ3adIk5AT95njgipKoFU14eZqP4ij/view?usp=drivesdk" }
     ]
   },
   {
     id: "mock-3",
-    slug: "plan-mantenimiento-preventivo-bombas-industriales",
-    titulo: "Plan Estandarizado de Mantenimiento Preventivo para Bombas Industriales",
-    descripcion: "Propuesta de un manual operativo de mantenimiento mecánico predictivo y preventivo diseñado para turbinas y bombas centrífugas en la industria del gas y el petróleo. Incluye análisis de vibraciones y termografía.",
-    carrera: "Ing. de Mantenimiento Mecánico", carrera_id: "mantenimiento",
-    semestre: "9no Semestre", semestre_id: "9",
-    ano_publicacion: "2023",
-    sede: "Extensión Maracaibo", sede_id: "maracaibo",
-    tipo: "Pasantías", tipo_id: "pasantia",
-    autores: ["Miguel Rivas"], autor: "Miguel Rivas",
-    profesor: "Ing. Carlos Govea",
-    fecha_publicacion: "20 de Agosto, 2023",
-    linea_investigacion: "Mantenimiento Industrial",
-    palabras_clave: ["Mantenimiento", "Bombas", "Industria", "Petróleo"],
-    score: 87, vistas: 156, descargas: 89,
-    status: "published",
-    galeria: [
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Plan_Mantenimiento.pdf", tipo: "pdf", peso: "3.8 MB" }
-    ]
-  },
-  {
-    id: "mock-4",
-    slug: "restauracion-modernizacion-arquitectonica-casco-historico",
-    titulo: "Restauración y Modernización Arquitectónica del Casco Histórico",
-    descripcion: "Proyecto urbanístico, paisajista y sociológico para restaurar los espacios públicos de la Plaza Central, incorporando jardines autosustentables e iluminación solar. Se enfoca en la preservación del patrimonio colonial.",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo Semestre", semestre_id: "10",
-    ano_publicacion: "2024",
-    sede: "Extensión Caracas", sede_id: "caracas",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    autores: ["Elena Suárez"], autor: "Elena Suárez",
-    profesor: "Arq. Mario Rossi",
-    fecha_publicacion: "10 de Enero, 2024",
-    linea_investigacion: "Urbanismo y Patrimonio",
-    palabras_clave: ["Arquitectura", "Patrimonio", "Sustentable", "Urbanismo"],
-    score: 85, vistas: 412, descargas: 210,
-    status: "published",
-    galeria: [
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Propuesta_Urbana.pdf", tipo: "pdf", peso: "15.0 MB" },
-      { nombre: "Modelado_3D.obj", tipo: "3d", peso: "85.0 MB" }
-    ]
-  },
-  {
-    id: "mock-5",
-    slug: "diseno-complejo-turistico-ecologico-costero",
-    titulo: "Diseño de un Complejo Turístico Ecológico Integrado al Entorno Costero",
-    descripcion: "Propuesta arquitectónica de cabañas turísticas sustentables utilizando materiales endémicos y sistemas pasivos de climatización para minimizar la huella de carbono.",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo Semestre", semestre_id: "10",
-    ano_publicacion: "2023",
-    sede: "Extensión Porlamar", sede_id: "porlamar",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    autores: ["Marcos Torres", "Lucía Peña"], autor: "Marcos Torres",
-    profesor: "Arq. Hernán Cortés",
-    fecha_publicacion: "15 de Noviembre, 2023",
-    linea_investigacion: "Diseño Arquitectónico Sustentable",
-    palabras_clave: ["Ecoturismo", "Climatización Pasiva", "Bambú", "Desarrollo Costero", "Bioclimática"],
-    score: 95, vistas: 580, descargas: 231,
-    status: "published",
-    galeria: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Memoria_Descriptiva.pdf", tipo: "pdf", peso: "4.2 MB" },
-      { nombre: "Planos_Estructurales.dwg", tipo: "cad", peso: "15.8 MB" },
-      { nombre: "Renders_Alta_Resolucion.rar", tipo: "rar", peso: "145.0 MB" },
-      { nombre: "Base_De_Datos_Ambiental.sql", tipo: "sql", peso: "350 KB" }
-    ]
-  },
-  {
-    id: "mock-6",
-    slug: "centro-cultural-biblioteca-publica-diseno-parametrico",
-    titulo: "Centro Cultural y Biblioteca Pública con Diseño Paramétrico",
-    descripcion: "Diseño de un recinto público enfocado en la difusión cultural, utilizando herramientas de diseño arquitectónico generativo para optimizar iluminación natural y acústica.",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "9no Semestre", semestre_id: "9",
-    ano_publicacion: "2024",
-    sede: "Extensión Mérida", sede_id: "merida",
-    tipo: "Proyecto de Materia", tipo_id: "materia",
-    autores: ["Valeria Guzmán"], autor: "Valeria Guzmán",
-    profesor: "Arq. Luis Salas",
-    fecha_publicacion: "22 de Febrero, 2024",
-    linea_investigacion: "Arquitectura Biomimética",
-    palabras_clave: ["Paramétrico", "Biblioteca", "Cultura", "Acústica"],
-    score: 89, vistas: 320, descargas: 110,
-    status: "published",
-    galeria: [
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Proyecto_Parametrico.pdf", tipo: "pdf", peso: "9.7 MB" }
-    ]
-  },
-  {
-    id: "mock-7",
-    slug: "viviendas-interes-social-modulares-expandibles",
-    titulo: "Viviendas de Interés Social Modulares y Expandibles",
-    descripcion: "Alternativa habitacional de bajo costo diseñada bajo un esquema arquitectónico modular que permite crecimiento ordenado según las necesidades del grupo familiar.",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo Semestre", semestre_id: "10",
-    ano_publicacion: "2023",
-    sede: "Extensión Valencia", sede_id: "valencia",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    autores: ["Simón Andrade"], autor: "Simón Andrade",
-    profesor: "Arq. Claudia Martínez",
-    fecha_publicacion: "30 de Junio, 2023",
-    linea_investigacion: "Vivienda Social",
-    palabras_clave: ["Vivienda", "Modular", "Interés Social", "Costos"],
-    score: 96, vistas: 890, descargas: 412,
-    status: "published",
-    galeria: [
-      "https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    archivos: [
-      { nombre: "Diseño_Modular.pdf", tipo: "pdf", peso: "5.5 MB" }
-    ]
-  },
-  {
-    id: "mock-8",
-    slug: "intervencion-paisajismo-zonas-universitarias",
-    titulo: "Intervención de Paisajismo en Zonas Universitarias Deterioradas",
-    descripcion: "Recuperación de espacios verdes dentro del campus universitario promoviendo senderos bioclimáticos, áreas de estudio al aire libre y reforestación.",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
+    slug: "creacion-pagina-web-escuela-emprendimiento-maria-auxiliadora",
+    titulo: "Creación de una página web para la ampliación de la oferta de servicios de cursos en la Escuela para el Emprendimiento María Auxiliadora",
+    descripcion: "El proyecto tuvo como Objetivo General la creación de una página web para la Escuela para el Emprendimiento María Auxiliadora, buscando ampliar la oferta de servicios y su alcance en la comunidad. La Justificación principal reside en la necesidad de superar barreras geográficas (ampliar el público), centralizar la información (servicios, horarios, noticias) para facilitar el acceso, optimizar los procesos internos (inscripción y administración) y fortalecer la identidad institucional al mostrar logros e integrar canales de comunicación bidireccional. Los Objetivos Específicos se centraron en identificar necesidades, analizar portales web de referencia y diseñar la página con funcionalidad y accesibilidad. Como Resultados Esperados, se proyectó un aumento de visibilidad, mayor eficiencia en la gestión, fortalecimiento de la comunidad y un impacto social positivo al facilitar el acceso a programas educativos y de emprendimiento.",
+    carrera: "Ingeniería de Sistemas", carrera_id: "sistemas",
     semestre: "8vo Semestre", semestre_id: "8",
     ano_publicacion: "2024",
-    sede: "Sede Principal Barcelona", sede_id: "barcelona",
-    tipo: "Servicio Comunitario", tipo_id: "comunitario",
-    autores: ["Ricardo Silva"], autor: "Ricardo Silva",
-    profesor: "Ing. Beatriz Díaz",
-    fecha_publicacion: "14 de Abril, 2024",
-    linea_investigacion: "Paisajismo Urbano",
-    palabras_clave: ["Paisajismo", "Universidad", "Ecológico", "Campus"],
-    score: 82, vistas: 120, descargas: 35,
+    sede: "Extensión Maracaibo", sede_id: "maracaibo",
+    tipo: "Servicio Comunitario", tipo_id: "Servicio Comunitario",
+    autores: ["Angel Melchor", "Sneider Araque", "Rubel Maneiro", "Eric Gomes"], autor: "Angel Melchor, Sneider Araque, Rubel Maneiro, Eric Gomes",
+    profesor: "MsC Yerlin Herrera",
+    fecha_publicacion: "10 de Febrero, 2024",
+    linea_investigacion: "Sistema de Información",
+    palabras_clave: ["Sistema de Información", "Página Web", "Colegio", "Proyecto Educativo", "Serv. Comunitario"],
+    score: 87, vistas: 156, descargas: 89,
     status: "published",
+    enlace_online: "https://sc-mariaauxiliadora.vercel.app/",
     galeria: [
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     ],
     archivos: [
-      { nombre: "Informe_Servicio.pdf", tipo: "pdf", peso: "2.8 MB" }
+      { nombre: "servicio-comunitario-master.zip", tipo: "zip", peso: "518.1 KB", url: "https://drive.google.com/file/d/1TMTkd9JmjspNDyA7fswk9G39B4JyIu5_/view?usp=drivesdk" },
+      { nombre: "Servicio Comunitario - Sistemas.pdf", tipo: "pdf", peso: "1.9 MB", url: "https://drive.google.com/file/d/1hvMuR8ZECqn_5bFTXZ3bWLaiKVzdqdhL/view?usp=drivesdk" }
     ]
-  }
+  },
 ];

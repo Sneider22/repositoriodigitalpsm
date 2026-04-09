@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { LogIn, UserPlus, Mail, Lock, User, ArrowRight, Loader2, AlertCircle, GraduationCap, MapPin, ChevronDown, CheckCircle2, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'sonner';
 
 const CustomSelect = ({ label, icon: Icon, value, onChange, options, placeholder, isOpen, onToggle }) => {
   return (
@@ -52,9 +53,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(location.state?.isLogin !== false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [showToast, setShowToast] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeSelect, setActiveSelect] = useState(null); // 'career' or 'location' or null
@@ -87,12 +85,14 @@ const Auth = () => {
   // 0. Detectar éxito de registro desde URL para mostrar notificación premium
   useEffect(() => {
     if (searchParams.get('registered') === 'true') {
-      // 1. Mostrar el aviso nativo que el usuario solicitó
-      alert("¡Registro Exitoso! Tu cuenta ha sido creada. Por seguridad, ahora debes iniciar sesión manualmente con tus credenciales.");
+      // Usar Sonner para éxito de registro
+      toast.success("¡Registro Exitoso!", {
+        description: "Tu cuenta ha sido creada. Por seguridad, ahora debes iniciar sesión manualmente.",
+        duration: 8000
+      });
       
       // 2. Preparar el formulario
       setIsLogin(true);
-      setSuccessMessage("Por favor, ingresa tu correo y contraseña.");
       
       // 3. Limpiar URL
       const newParams = new URLSearchParams(searchParams);
@@ -109,11 +109,8 @@ const Auth = () => {
     }
   }, [user, navigate, showSuccess]);
 
-  // 2. Sincronizar con el estado de navegación (Navbar)
   React.useEffect(() => {
     setActiveSelect(null);
-    setError(null); // Limpiar errores al navegar
-    setSuccessMessage(null); // Limpiar mensajes al navegar
     if (location.state?.isLogin !== undefined) {
       setIsLogin(location.state.isLogin);
     }
@@ -133,13 +130,13 @@ const Auth = () => {
 
     // Validación de contraseña (Estándar profesional sugerido)
     if (!isLogin && formData.password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres para tu seguridad.');
+      toast.error('Contraseña demasiado corta', {
+        description: 'La contraseña debe tener al menos 8 caracteres para tu seguridad.'
+      });
       setLoading(false);
       return;
     }
 
-    setError(null);
-    setSuccessMessage(null);
     setActiveSelect(null); // Cerrar cualquier selector al enviar
 
     try {
@@ -157,6 +154,9 @@ const Auth = () => {
 
         if (error) throw error;
 
+        toast.success('¡Bienvenido de nuevo!', {
+          description: 'Has iniciado sesión correctamente.'
+        });
         navigate('/');
       } else {
         const signUpPromise = supabase.auth.signUp({
@@ -177,7 +177,6 @@ const Auth = () => {
         if (error) throw error;
 
         // CERRAR SESIÓN AUTOMÁTICA OBLIGATORIAMENTE
-        // Esto garantiza que el sistema no lo deje pasar sin loguearse manualmente
         await supabase.auth.signOut();
 
         // REDIRECCIÓN CON PARÁMETRO PARA ACTIVAR AVISO
@@ -195,7 +194,9 @@ const Auth = () => {
         errorMsg = 'Este correo ya está registrado. Intenta iniciar sesión.';
       }
 
-      setError(errorMsg);
+      toast.error('Error de autenticación', {
+        description: errorMsg
+      });
     } finally {
       setLoading(false);
     }
@@ -219,8 +220,9 @@ const Auth = () => {
               onClick={() => {
                 setShowSuccess(false);
                 setIsLogin(true);
-                setError(null);
-                setSuccessMessage("¡Tu cuenta ha sido creada! Por favor, inicia sesión para continuar.");
+                toast.success("¡Tu cuenta ha sido creada!", {
+                  description: "Por favor, inicia sesión para continuar."
+                });
               }}
               className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-primary-500/30"
             >
@@ -235,24 +237,6 @@ const Auth = () => {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 relative">
       
-      {/* NOTIFICACIÓN PREMIUM (TOAST) */}
-      {showToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm px-4 animate-in slide-in-from-top-10 duration-500">
-          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-green-200 dark:border-green-900 shadow-2xl rounded-3xl p-4 flex items-center gap-4 ring-1 ring-green-500/20">
-            <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/40">
-              <CheckCircle2 size={24} />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-bold text-gray-900 dark:text-white">¡Registro Exitoso!</h4>
-              <p className="text-[11px] text-gray-600 dark:text-gray-400 font-medium">Cuenta creada. Ya puedes iniciar sesión.</p>
-            </div>
-            <button onClick={() => setShowToast(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-md w-full animate-in fade-in zoom-in duration-500">
 
         {/* Card Principal */}
@@ -274,19 +258,6 @@ const Auth = () => {
           </div>
 
           <div className="p-8">
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl flex items-center gap-3 text-red-600 dark:text-red-400 text-sm animate-in slide-in-from-top-2">
-                <AlertCircle className="shrink-0 w-5 h-5" />
-                <p>{error}</p>
-              </div>
-            )}
-
-            {successMessage && (
-              <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-2xl flex items-center gap-3 text-green-600 dark:text-green-400 text-sm animate-in slide-in-from-top-2">
-                <CheckCircle2 className="shrink-0 w-5 h-5" />
-                <p>{successMessage}</p>
-              </div>
-            )}
 
             <form onSubmit={handleAuth} className="space-y-5">
               {!isLogin && (
@@ -391,8 +362,6 @@ const Auth = () => {
                 onClick={() => {
                   setIsLogin(!isLogin);
                   setActiveSelect(null);
-                  setError(null); // Limpiar errores al cambiar de pestaña
-                  setSuccessMessage(null); // Limpiar mensajes al cambiar manualmente
                 }}
                 className="text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >

@@ -6,6 +6,7 @@ import UploadModal from '../components/repository/UploadModal';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { toast } from 'sonner';
 import { mockProjects } from '../data/mockProjects';
 
 // Las constantes CARRERAS y SEDES ahora se cargan dinámicamente desde la DB dentro del componente.
@@ -28,7 +29,7 @@ const TIPOS = [
   { id: "investigacion", label: "Proyecto de Investigación" },
   { id: "pasantia", label: "Pasantías" },
   { id: "comunitario", label: "Servicio Comunitario" },
-  { id: "materia", label: "Proyecto de Materia" }
+  { id: "materia", label: "Asignación Académica" }
 ];
 
 // Sedes temporales eliminadas. Se cargan en el componente.
@@ -156,7 +157,9 @@ const Repository = () => {
 
   const handleOpenUpload = () => {
     if (!user) {
-      alert("Debes iniciar sesión para subir un proyecto");
+      toast.error("Sesión requerida", {
+        description: "Debes iniciar sesión para subir un proyecto"
+      });
       navigate('/auth');
       return;
     }

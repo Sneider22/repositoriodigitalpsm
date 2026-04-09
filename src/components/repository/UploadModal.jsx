@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Upload, FileText, Calendar, GraduationCap, MapPin, Tag, Plus, Loader2, Link as LinkIcon, User, BookOpen, ChevronDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { toast } from 'sonner';
 
 const CustomDropdown = ({ icon: Icon, defaultLabel, options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -122,7 +123,7 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
     { id: "investigacion", label: "Proyecto de Investigación" },
     { id: "pasantia", label: "Pasantías" },
     { id: "comunitario", label: "Servicio Comunitario" },
-    { id: "materia", label: "Proyecto de Materia" }
+    { id: "materia", label: "Asignación Académica" }
   ];
 
   const handleFileChange = (e) => {
@@ -136,7 +137,7 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return alert("Debes iniciar sesión para subir un proyecto");
+    if (!user) return toast.error("Debes iniciar sesión para subir un proyecto");
 
     setLoading(true);
     setUploadProgress({ current: 0, total: files.length, status: 'Iniciando subida...' });
@@ -243,16 +244,20 @@ const UploadModal = ({ isOpen, onClose, onSuccess }) => {
       setUploadProgress(prev => ({ ...prev, status: '¡Completado con éxito!' }));
 
       if (storageWarning) {
-        alert("⚠️ El proyecto se guardó correctamente, pero algunos archivos NO se pudieron subir por inestabilidad en la conexión.");
+        toast.warning("Proyecto guardado con advertencias", {
+          description: "El proyecto se guardó correctamente, pero algunos archivos NO se pudieron subir por inestabilidad en la conexión."
+        });
       } else {
-        alert("¡Proyecto enviado con éxito! Un administrador lo revisará pronto.");
+        toast.success("¡Proyecto enviado con éxito!", {
+          description: "Un administrador lo revisará pronto."
+        });
       }
 
       onSuccess?.();
       onClose();
     } catch (error) {
       console.error("🔴 Error completo:", error);
-      alert(error.message || "Ocurrió un error inesperado al subir el proyecto.");
+      toast.error(error.message || "Ocurrió un error inesperado al subir el proyecto.");
     } finally {
       setLoading(false);
       setUploadProgress({ current: 0, total: 0, status: '' });

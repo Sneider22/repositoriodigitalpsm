@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 
@@ -11,7 +12,6 @@ import ProjectDetail from './pages/ProjectDetail'
 import Auth from './pages/Auth'
 
 import { AuthProvider, useAuth } from './context/AuthContext'
-import { Loader2 } from 'lucide-react'
 
 // Utilidad nativa de React Router para reiniciar el Scroll a tope de página
 const ScrollToTop = () => {
@@ -53,6 +53,7 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-center" richColors closeButton />
       <Router>
         <ScrollToTop />
         <AppContent />

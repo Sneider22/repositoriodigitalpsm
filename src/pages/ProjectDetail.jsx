@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, Calendar, MapPin, BookOpen, FileText, User, 
   Tag, Download, Globe, Database, FileCode, Archive, ImagePlus,
-  Layers, ChevronRight, File, Package, Clock, X, ChevronLeft
+  Layers, ChevronRight, File, Package, Clock, X, ChevronLeft, Loader2
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { mockProjects } from '../data/mockProjects';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import { toast } from 'sonner';
 
 // Utilidad para extraer ícono visual basado en el tipo de archivo
 const getFileIcon = (tipo) => {
@@ -31,7 +34,7 @@ const getFileIcon = (tipo) => {
 const diccionarios = {
   carreras: { civil: "Ingeniería Civil", sistemas: "Ingeniería de Sistemas", mantenimiento: "Ing. de Mantenimiento Mecánico", arquitectura: "Arquitectura", electrica: "Ing. Eléctrica", electronica: "Ing. Electrónica", industrial: "Ing. Industrial", telecomunicaciones: "Ing. en Telecomunicaciones", quimica: "Ing. Química", petroleo: "Ing. de Petroleo", agronomica: "Ing. Agronómica", diseno: "Ing. en Diseño Industrial" },
   sedes: { barcelona: "Sede Barcelona", valencia: "Ext. Valencia", cabimas: "Ext. Cabimas", maracaibo: "Ext. Maracaibo", caracas: "Ext. Caracas", merida: "Ext. Mérida", sancristobal: "Ext. San Cristóbal", barinas: "Ext. Barinas", maracay: "Ext. Maracay", porlamar: "Ext. Porlamar", puertoordaz: "Ext. Puerto Ordaz", maturin: "Ext. Maturín", ciudadojeda: "Ext. Ciudad Ojeda" },
-  tipos: { grado: "Trabajo de Grado", investigacion: "Proyecto de Investigación", pasantia: "Pasantías", comunitario: "Servicio Comunitario", materia: "Proyecto de Materia" }
+  tipos: { grado: "Trabajo de Grado", investigacion: "Proyecto de Investigación", pasantia: "Pasantías", comunitario: "Servicio Comunitario", materia: "Asignación Académica" }
 };
 
 const ProjectDetail = () => {
@@ -40,6 +43,89 @@ const ProjectDetail = () => {
   
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [downloadingAll, setDownloadingAll] = useState(false);
+
+  const handleDownloadAll = async () => {
+    if (!project || !project.archivos || project.archivos.length === 0) {
+      toast.info('No hay archivos disponibles', {
+        description: 'Este proyecto no contiene archivos adjuntos.'
+      });
+      return;
+    }
+
+    const isMock = mockProjects.some(m => m.id === project.id);
+    if (isMock) {
+      toast.info('Modo Demostración', {
+        description: 'Los proyectos de ejemplo (Mocks) no tienen archivos reales descargables.'
+      });
+      return;
+    }
+
+    const zipOrRar = project.archivos.find(f => f.tipo === 'zip' || f.tipo === 'rar');
+    if (zipOrRar && zipOrRar.url) {
+      toast.success('Iniciando descarga', {
+        description: `Descargando el comprimido original: ${zipOrRar.nombre}`
+      });
+      window.open(zipOrRar.url, '_blank');
+      return;
+    }
+
+    setDownloadingAll(true);
+    toast.info('Preparando descarga en lote', {
+      description: 'Generando archivo ZIP, por favor espera...'
+    });
+
+    try {
+      const zip = new JSZip();
+      
+      // Sanitizar título para ser usado como carpeta
+      const safeTitle = project.titulo ? project.titulo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'proyecto';
+      const folderName = safeTitle;
+      const projectFolder = zip.folder(folderName);
+      
+      let filesAdded = 0;
+
+      for (const file of project.archivos) {
+        if (!file.url) continue;
+        
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const blob = await response.blob();
+          projectFolder.file(file.nombre, blob);
+          filesAdded++;
+        } catch (error) {
+          console.error(`Error downloading file ${file.nombre}:`, error);
+          toast.warning('Advertencia de descarga', {
+             description: `No se pudo empaquetar ${file.nombre}. El archivo podría tener restricciones de origen (CORS) o no existir.`
+          });
+        }
+      }
+
+      if (filesAdded === 0) {
+        throw new Error("No pudimos anexar ningún archivo al ZIP.");
+      }
+
+      toast.info('Comprimiendo', {
+        description: 'Creando archivo .ZIP final...'
+      });
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      saveAs(zipBlob, `${folderName}.zip`);
+      
+      toast.success('Descarga completada', {
+        description: `Proyecto guardado como ${folderName}.zip`
+      });
+
+    } catch (error) {
+      console.error('Error generating zip:', error);
+      toast.error('Error al empaquetar', {
+        description: error.message || 'Intenta iniciar la descarga de los archivos uno por uno.'
+      });
+    } finally {
+      setDownloadingAll(false);
+    }
+  };
 
   // Buscar el proyecto por ID/slug a la base de datos o en los mocks locales
   useEffect(() => {
@@ -323,7 +409,7 @@ const ProjectDetail = () => {
                   <div 
                     key={i} 
                     onClick={() => openLightbox(i)}
-                    className="aspect-video rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm cursor-zoom-in group bg-gray-50 dark:bg-gray-800 transition-all hover:shadow-xl hover:border-primary-500/30"
+                    className="aspect-[4/3] rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm cursor-zoom-in group bg-gray-50 dark:bg-gray-800 transition-all hover:shadow-xl hover:border-primary-500/30"
                   >
                     <img src={img} alt={`Galería ${i+1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   </div>
@@ -396,10 +482,18 @@ const ProjectDetail = () => {
             </div>
 
             {/* Global Zip Button */}
-            <div className="flex justify-center md:justify-start">
-               <button className="bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 w-full md:w-auto justify-center group">
-                 <Archive className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                 Descargar Proyecto Completo (.ZIP)
+            <div className="flex justify-center md:justify-start mt-6">
+               <button 
+                 onClick={handleDownloadAll}
+                 disabled={downloadingAll}
+                 className="bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 w-full md:w-auto justify-center group"
+               >
+                 {downloadingAll ? (
+                   <Loader2 className="w-5 h-5 animate-spin" />
+                 ) : (
+                   <Archive className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                 )}
+                 {downloadingAll ? 'Generando ZIP...' : 'Descargar Proyecto Completo (.ZIP)'}
                </button>
             </div>
 
@@ -433,7 +527,7 @@ const ProjectDetail = () => {
           )}
 
           {/* Imagen Principal */}
-          <div className="relative max-w-5xl w-full h-[70vh] flex items-center justify-center select-none" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-7xl w-full h-[85vh] flex items-center justify-center select-none" onClick={(e) => e.stopPropagation()}>
             <img 
               src={project.galeria[activeImageIndex]} 
               alt="Visualización a detalle" 
