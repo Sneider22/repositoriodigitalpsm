@@ -166,6 +166,18 @@ const Repository = () => {
     setIsUploadModalOpen(true);
   };
 
+  // Genera un slug amigable a partir del título (igual que los mocks)
+  const toSlug = (title) => {
+    if (!title) return '';
+    return title
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar tildes
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')  // solo letras, números, guiones
+      .trim()
+      .replace(/\s+/g, '-')          // espacios -> guiones
+      .replace(/-+/g, '-');           // guiones dobles -> uno
+  };
+
   // Si el usuario hace clic nuevamente en un link de Home, forzamos actualización
   useEffect(() => {
     if (location.state?.carreraId) {
@@ -216,8 +228,8 @@ const Repository = () => {
       console.log(`✅ ÉXITO: Recibidos ${data.length} proyectos.`);
 
       const mappedProjects = data.map((p) => ({
-        id: p.id,
-        slug: p.id,
+        id: p.id,          // UUID real para llamadas a Supabase
+        slug: toSlug(p.title) || p.id,  // Slug legible para la URL
         titulo: p.title,
         descripcion: p.description,
         autor: p.profiles?.full_name || 'Enviado por residente',
@@ -229,8 +241,9 @@ const Repository = () => {
         sede_id: Number(p.location_id),
         tipo: TIPOS.find(t => t.id === p.project_type)?.label || p.project_type,
         tipo_id: p.project_type,
-        vistas: Math.floor(Math.random() * 500),
-        descargas: Math.floor(Math.random() * 200)
+        vistas: p.views_count || 0,
+        descargas: p.downloads_count || 0,
+        score: p.score || 85
       }));
       
       setProjectsData([...mappedProjects, ...mockProjects]);

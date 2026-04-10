@@ -14,7 +14,7 @@ export const mockProjects = [
     fecha_publicacion: "12 de Octubre, 2023",
     linea_investigacion: "Diseño Arquitectónico VI",
     palabras_clave: ["Diseño Arquitectónico", "Mercado Municipal", "Arquitectura", "Planos", "Render"],
-    score: 98, vistas: 342, descargas: 125,
+    score: 98,
     status: "published",
     galeria: [
       "https://i.ibb.co/pvN0psfY/rampa-principal.png", "https://i.ibb.co/WWFys7S8/entrada-principal-4.png", "https://i.ibb.co/W4kFbrSW/entrada-principal-3.png", "https://i.ibb.co/bj816pzv/entrada-principal-2.png", "https://i.ibb.co/CKyjkDhd/entrada-principal.png", "https://i.ibb.co/mVFmF3x3/mercado-municipal.png"
@@ -40,7 +40,7 @@ export const mockProjects = [
     fecha_publicacion: "02 de Julio, 2024",
     linea_investigacion: "Simulación Digital",
     palabras_clave: ["Simulación", "Física", "Oscilador Armónico Simple", "JavaScript"],
-    score: 92, vistas: 210, descargas: 45,
+    score: 92,
     status: "published",
     enlace_online: "https://simulacion-dig.vercel.app/",
     galeria: [
@@ -65,7 +65,7 @@ export const mockProjects = [
     fecha_publicacion: "10 de Febrero, 2024",
     linea_investigacion: "Sistema de Información",
     palabras_clave: ["Sistema de Información", "Página Web", "Colegio", "Proyecto Educativo", "Serv. Comunitario"],
-    score: 87, vistas: 156, descargas: 89,
+    score: 87,
     status: "published",
     enlace_online: "https://sc-mariaauxiliadora.vercel.app/",
     galeria: [
@@ -91,7 +91,7 @@ export const mockProjects = [
     fecha_publicacion: "01 de Enero, 2025",
     linea_investigacion: "Sistema de Procesamiento de Información",
     palabras_clave: ["Inteligencia de Negocios", "Procesamiento de Lenguaje Natural", "Prototipo", "Gestión Financiera", "Toma de Decisiones"],
-    score: 99, vistas: 156, descargas: 89,
+    score: 99,
     status: "published",
     galeria: [
     ],
@@ -115,7 +115,7 @@ export const mockProjects = [
     fecha_publicacion: "13 de Enero, 2025",
     linea_investigacion: "Diseño VII",
     palabras_clave: ["Centro de Convenciones", "Arquitectura", "Diseño", "Proyecto Arquitectónico"],
-    score: 92, vistas: 156, descargas: 89,
+    score: 92,
     status: "published",
     galeria: [
       "https://i.ibb.co/3ygBNCdB/IMG-20260409-WA0107.jpg", "https://i.ibb.co/BKFDvGZZ/IMG-20260409-WA0106.jpg", "https://i.ibb.co/YTNxWcqF/IMG-20260409-WA0108.jpg",
@@ -140,7 +140,7 @@ export const mockProjects = [
     fecha_publicacion: "05 de Noviembre, 2023",
     linea_investigacion: "Base de Datos",
     palabras_clave: ["base de datos", "sql", "proyecto", "html", "css", "javascript"],
-    score: 82, vistas: 156, descargas: 89,
+    score: 82,
     status: "published",
     galeria: [
       "https://i.ibb.co/LDPmxF7x/Screenshot-20260409-165422-Drive-1.jpg", "https://i.ibb.co/21ZPjhRJ/IMG-20260409-WA0111.jpg", "https://i.ibb.co/RT1yQv0n/IMG-20260409-WA0110.jpg",

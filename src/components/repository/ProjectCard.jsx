@@ -51,8 +51,12 @@ const ProjectCard = ({ project }) => {
 
       <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-xs font-semibold">
-          <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Eye className="w-4 h-4"/> {project.vistas}</div>
-          <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Download className="w-4 h-4"/> {project.descargas}</div>
+          {project.vistas !== undefined && (
+            <>
+              <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Eye className="w-4 h-4"/> {project.vistas}</div>
+              <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Download className="w-4 h-4"/> {project.descargas}</div>
+            </>
+          )}
         </div>
         <Link to={`/repositorios/proyecto/${project.slug}`} className="flex items-center gap-1 text-sm font-extrabold text-primary-600 dark:text-primary-400 group-hover:underline group-hover:translate-x-1 transition-transform">
           Ver Detalles <ChevronRight className="w-4 h-4" />

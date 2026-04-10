@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowLeft, Calendar, MapPin, BookOpen, FileText, User, 
   Tag, Download, Globe, Database, FileCode, Archive, ImagePlus,
-  Layers, ChevronRight, File, Package, Clock, X, ChevronLeft, Loader2
+  Layers, ChevronRight, File, Package, Clock, X, ChevronLeft, Loader2, Eye
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -37,6 +37,20 @@ const diccionarios = {
   tipos: { grado: "Trabajo de Grado", investigacion: "Proyecto de Investigación", pasantia: "Pasantías", comunitario: "Servicio Comunitario", materia: "Asignación Académica" }
 };
 
+// Genera slug legible igual que en Repository.jsx
+const toSlug = (title) => {
+  if (!title) return '';
+  return title
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+};
+
+const isUUID = (str) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
 const ProjectDetail = () => {
   const { slug } = useParams();
   const [activeImageIndex, setActiveImageIndex] = useState(null);
@@ -44,6 +58,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [downloadingAll, setDownloadingAll] = useState(false);
+  const viewTrackedRef = useRef(false);
 
   const handleDownloadAll = async () => {
     if (!project || !project.archivos || project.archivos.length === 0) {
@@ -61,12 +76,22 @@ const ProjectDetail = () => {
       return;
     }
 
+    const trackDownload = () => {
+      if (!project || !project.id) return;
+      const isMock = mockProjects.some(m => m.id === project.id);
+      if (isMock) return;
+
+      supabase.rpc('increment_download', { project_id_param: project.id }).then(({error}) => { if (error) console.error("Error RPC:", error); });
+      setProject(prev => ({...prev, descargas: (prev.descargas || 0) + 1}));
+    };
+
     const zipOrRar = project.archivos.find(f => f.tipo === 'zip' || f.tipo === 'rar');
     if (zipOrRar && zipOrRar.url) {
       toast.success('Iniciando descarga', {
         description: `Descargando el comprimido original: ${zipOrRar.nombre}`
       });
       window.open(zipOrRar.url, '_blank');
+      trackDownload();
       return;
     }
 
@@ -113,6 +138,8 @@ const ProjectDetail = () => {
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       saveAs(zipBlob, `${folderName}.zip`);
       
+      trackDownload();
+      
       toast.success('Descarga completada', {
         description: `Proyecto guardado como ${folderName}.zip`
       });
@@ -140,23 +167,10 @@ const ProjectDetail = () => {
         return; // Salimos temprano y no consultamos Supabase
       }
 
-      // 2. Si no está en los locales, intentar buscar el UUID en Supabase
+      // 2. Si no está en los locales, buscar en Supabase
+      // Si el param es un UUID directo, buscar por id; si es un slug amigable, buscar por título
       try {
-        const { data, error } = await supabase
-          .from('projects')
-          .select(`
-            *,
-            career:career_id(name_career),
-            location:location_id(name_location),
-            profiles:user_id(full_name)
-          `)
-          .eq('id', slug)
-          .single();
-          
-        if (error) throw error;
-        
-        if (data) {
-          // Extraer imágenes y otros archivos
+        const processProjectData = async (data) => {
           const isImage = (fmt) => ['png','jpg','jpeg','webp','gif','svg'].includes(fmt?.toLowerCase());
           const parseExt = (name) => name?.split('.').pop()?.toLowerCase();
           
@@ -179,9 +193,17 @@ const ProjectDetail = () => {
             });
           }
 
+          let currentViews = data.views_count || 0;
+          
+          if (!viewTrackedRef.current) {
+            viewTrackedRef.current = true;
+            currentViews += 1;
+            supabase.rpc('increment_view', { project_id_param: data.id }).then(({error}) => { if (error) console.error("Error RPC:", error); });
+          }
+
           setProject({
             id: data.id,
-            slug: data.id,
+            slug: toSlug(data.title) || data.id,
             titulo: data.title,
             descripcion: data.description,
             carrera: data.career?.name_career || 'Carrera no especificada',
@@ -196,8 +218,30 @@ const ProjectDetail = () => {
             palabras_clave: data.keywords || [],
             galeria: galeria,
             archivos: archivos,
-            enlace_online: data.external_link
+            enlace_online: data.external_link,
+            vistas: currentViews,
+            descargas: data.downloads_count || 0
           });
+        };
+
+        if (isUUID(slug)) {
+          // Buscar directamente por UUID
+          const { data, error } = await supabase
+            .from('projects')
+            .select(`*, career:career_id(name_career), location:location_id(name_location), profiles:user_id(full_name)`)
+            .eq('id', slug)
+            .single();
+          if (error) throw error;
+          if (data) await processProjectData(data);
+        } else {
+          // Buscar todos y filtrar por slug generado del título
+          const { data: allData, error: allError } = await supabase
+            .from('projects')
+            .select(`*, career:career_id(name_career), location:location_id(name_location), profiles:user_id(full_name)`);
+          if (allError) throw allError;
+          const match = allData?.find(p => toSlug(p.title) === slug);
+          if (!match) throw new Error('Proyecto no encontrado');
+          await processProjectData(match);
         }
       } catch (err) {
         console.error("Error al obtener detalle del proyecto:", err);
@@ -304,6 +348,14 @@ const ProjectDetail = () => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-bold bg-rose-50 dark:bg-rose-900/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
               <FileText className="w-4 h-4" /> {project.tipo}
             </span>
+            
+            {/* Stats Visibles */}
+            {project.vistas !== undefined && (
+              <div className="flex items-center gap-4 ml-auto text-sm font-bold text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800/50 px-4 py-2 rounded-full border border-gray-100 dark:border-gray-800">
+                <span className="flex items-center gap-1.5"><Eye className="w-4 h-4 text-primary-500" /> {project.vistas}</span>
+                <span className="flex items-center gap-1.5"><Download className="w-4 h-4 text-primary-500" /> {project.descargas}</span>
+              </div>
+            )}
           </div>
           
         </div>
@@ -468,7 +520,19 @@ const ProjectDetail = () => {
 
                     {/* Botón Descarga */}
                     {file.url ? (
-                      <a href={file.url} target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-gray-950 hover:bg-primary-50 text-primary-600 dark:text-primary-400 border border-gray-200 dark:border-gray-700 font-bold px-4 py-1.5 rounded-lg text-xs transition-colors shadow-sm whitespace-nowrap self-end sm:self-center">
+                      <a 
+                        href={file.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        onClick={() => {
+                          const isMock = mockProjects.some(m => m.id === project.id);
+                          if (!isMock) {
+                            supabase.rpc('increment_download', { project_id_param: project.id }).then(({error}) => { if (error) console.error("Error RPC:", error); });
+                            setProject(prev => ({...prev, descargas: (prev.descargas || 0) + 1}));
+                          }
+                        }}
+                        className="bg-white dark:bg-gray-950 hover:bg-primary-50 text-primary-600 dark:text-primary-400 border border-gray-200 dark:border-gray-700 font-bold px-4 py-1.5 rounded-lg text-xs transition-colors shadow-sm whitespace-nowrap self-end sm:self-center"
+                      >
                         Descargar
                       </a>
                     ) : (
