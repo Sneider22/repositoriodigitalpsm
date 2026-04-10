@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, X, GraduationCap, User, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { Sun, Moon, Menu, X, GraduationCap, User, LogOut, LogIn, UserPlus, ShieldCheck } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -51,6 +51,11 @@ const Navbar = () => {
           <Link to="/" className={`font-medium transition-colors ${location.pathname === '/' ? 'text-primary-600 dark:text-[#44bdff]' : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-[#44bdff]'}`}>Inicio</Link>
           <Link to="/repositorios" className={`font-medium transition-colors ${location.pathname === '/repositorios' ? 'text-primary-600 dark:text-[#44bdff]' : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-[#44bdff]'}`}>Repositorios</Link>
           <Link to="/info" className={`font-medium transition-colors ${location.pathname === '/info' ? 'text-primary-600 dark:text-[#44bdff]' : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-[#44bdff]'}`}>Información</Link>
+          {profile?.role === 'admin' && (
+            <Link to="/admin" className={`font-medium transition-colors flex items-center gap-1.5 ${location.pathname === '/admin' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400'}`}>
+              <ShieldCheck className="w-4 h-4" /> Admin
+            </Link>
+          )}
         </div>
 
         {/* Right side - Desktop & Mobile */}
@@ -90,7 +95,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-end">
                   <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none mb-1">{profile?.role || 'USUARIO'}</span>
                   <span className="text-sm font-bold text-gray-900 dark:text-white leading-none">
-                    {profile?.full_name?.split(' ')[0] || 'Hola'}
+                    {profile?.full_name?.split(' ')[0] || 'Usuario'}
                   </span>
                 </div>
                 <button 
@@ -133,9 +138,14 @@ const Navbar = () => {
               Navegación
             </h2>
             <div className="flex flex-col gap-8">
-              <Link to="/" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Inicio</Link>
-              <Link to="/repositorios" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Repositorios</Link>
-              <Link to="/info" className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Información</Link>
+              <Link to="/" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Inicio</Link>
+              <Link to="/repositorios" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Repositorios</Link>
+              <Link to="/info" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-primary-700 dark:text-[#44bdff] hover:text-primary-800 dark:hover:text-[#44bdff]/80 transition-colors uppercase tracking-tight">Información</Link>
+              {profile?.role === 'admin' && (
+                <Link to="/admin" onClick={() => setIsOpen(false)} className="text-4xl font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition-colors uppercase tracking-tight flex items-center gap-3">
+                  <ShieldCheck className="w-8 h-8" /> Admin
+                </Link>
+              )}
             </div>
             
             <div className="mt-auto pt-8 border-t border-gray-100 dark:border-gray-800">

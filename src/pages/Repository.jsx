@@ -5,21 +5,11 @@ import ProjectCard from '../components/repository/ProjectCard';
 import UploadModal from '../components/repository/UploadModal';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { toast } from 'sonner';
+import { mockProjects } from '../data/mockProjects';
 
-const CARRERAS = [
-  { id: "arquitectura", label: "Arquitectura" },
-  { id: "civil", label: "Ingeniería Civil" },
-  { id: "electrica", label: "Ingeniería Eléctrica" },
-  { id: "electronica", label: "Ingeniería Electrónica" },
-  { id: "industrial", label: "Ingeniería Industrial" },
-  { id: "mantenimiento", label: "Ingeniería de Mantenimiento Mecánico" },
-  { id: "sistemas", label: "Ingeniería de Sistemas" },
-  { id: "diseno", label: "Ingeniería en Diseño Industrial" },
-  { id: "telecomunicaciones", label: "Ingeniería en Telecomunicaciones" },
-  { id: "quimica", label: "Ingeniería Química" },
-  { id: "petroleo", label: "Ingeniería de Petróleo" },
-  { id: "agronomica", label: "Ingeniería Agronómica" }
-];
+// Las constantes CARRERAS y SEDES ahora se cargan dinámicamente desde la DB dentro del componente.
 
 const SEMESTRES = [
   { id: "1", label: "Primer Semestre" },
@@ -39,24 +29,10 @@ const TIPOS = [
   { id: "investigacion", label: "Proyecto de Investigación" },
   { id: "pasantia", label: "Pasantías" },
   { id: "comunitario", label: "Servicio Comunitario" },
-  { id: "materia", label: "Proyecto de Materia" }
+  { id: "materia", label: "Asignación Académica" }
 ];
 
-const SEDES = [
-  { id: "barcelona", label: "Sede Principal Barcelona" },
-  { id: "valencia", label: "Extensión Valencia" },
-  { id: "cabimas", label: "Extensión Cabimas" },
-  { id: "maracaibo", label: "Extensión Maracaibo" },
-  { id: "caracas", label: "Extensión Caracas" },
-  { id: "merida", label: "Extensión Mérida" },
-  { id: "sancristobal", label: "Extensión San Cristóbal" },
-  { id: "barinas", label: "Extensión Barinas" },
-  { id: "maracay", label: "Extensión Maracay" },
-  { id: "porlamar", label: "Extensión Porlamar" },
-  { id: "puertoordaz", label: "Extensión Puerto Ordaz" },
-  { id: "maturin", label: "Extensión Maturín" },
-  { id: "ciudadojeda", label: "Extensión Ciudad Ojeda" }
-];
+// Sedes temporales eliminadas. Se cargan en el componente.
 
 const CustomDropdown = ({ icon: Icon, defaultLabel, options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +48,9 @@ const CustomDropdown = ({ icon: Icon, defaultLabel, options, value, onChange }) 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedLabel = value ? options.find(opt => opt.id === value)?.label : defaultLabel;
+  // Asegurar que siempre haya un texto visible, incluso si el valor no coincide con ninguna opción todavía
+  const selectedOption = options.find(opt => opt.id === value || opt.id?.toString() === value?.toString());
+  const selectedLabel = selectedOption ? selectedOption.label : defaultLabel;
 
   return (
     <div className="relative group" ref={dropdownRef}>
@@ -113,123 +91,51 @@ const CustomDropdown = ({ icon: Icon, defaultLabel, options, value, onChange }) 
   );
 };
 
-const mockProjects = [
-  {
-    id: 1,
-    slug: "diseno-sistema-estructural-sismorresistente",
-    titulo: "Diseño de un Sistema Estructural Sismorresistente para Edificios Multifamiliares",
-    descripcion: "Análisis exhaustivo y diseño tridimensional de un sistema estructural en concreto armado capaz de resistir cargas sísmicas medias y altas en la zona oriental de Venezuela.",
-    autor: "Carlos Mendoza & Ana Ruiz",
-    carrera: "Ingeniería Civil", carrera_id: "civil",
-    semestre: "10mo", semestre_id: "10",
-    sede: "Extensión Porlamar", sede_id: "porlamar",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    score: 98,
-    vistas: 342,
-    descargas: 125
-  },
-  {
-    id: 2,
-    slug: "prototipo-app-movil-inventarios-clinicos",
-    titulo: "Prototipo de Aplicación Móvil para la Gestión de Inventarios Clínicos",
-    descripcion: "Desarrollo de una app móvil progresiva usando React Native y Supabase para el control del almacén del Instituto de Salud local, logrando eficientizar tiempos en un 40%.",
-    autor: "Luis Fermín",
-    carrera: "Ingeniería de Sistemas", carrera_id: "sistemas",
-    semestre: "8vo", semestre_id: "8",
-    sede: "Sede Principal Barcelona", sede_id: "barcelona",
-    tipo: "Proyecto de Materia", tipo_id: "materia",
-    score: 92,
-    vistas: 210,
-    descargas: 45
-  },
-  {
-    id: 3,
-    slug: "plan-mantenimiento-preventivo-bombas-industriales",
-    titulo: "Plan Estandarizado de Mantenimiento Preventivo para Bombas Industriales",
-    descripcion: "Propuesta de un manual operativo de mantenimiento mecánico predictivo y preventivo diseñado para turbinas y bombas centrífugas en la industria del gas y el petróleo.",
-    autor: "Miguel Rivas",
-    carrera: "Ing. de Mantenimiento Mecánico", carrera_id: "mantenimiento",
-    semestre: "9no", semestre_id: "9",
-    sede: "Extensión Maracaibo", sede_id: "maracaibo",
-    tipo: "Pasantías", tipo_id: "pasantia",
-    score: 87,
-    vistas: 156,
-    descargas: 89
-  },
-  {
-    id: 4,
-    slug: "restauracion-modernizacion-arquitectonica-casco-historico",
-    titulo: "Restauración y Modernización Arquitectónica del Casco Histórico",
-    descripcion: "Proyecto urbanístico, paisajista y sociológico para restaurar los espacios públicos de la Plaza Central, incorporando jardines autosustentables e iluminación solar.",
-    autor: "Elena Suárez",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo", semestre_id: "10",
-    sede: "Extensión Caracas", sede_id: "caracas",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    score: 85,
-    vistas: 412,
-    descargas: 210
-  },
-  {
-    id: 5,
-    slug: "diseno-complejo-turistico-ecologico-costero",
-    titulo: "Diseño de un Complejo Turístico Ecológico Integrado al Entorno Costero",
-    descripcion: "Propuesta arquitectónica de cabañas turísticas sustentables utilizando materiales endémicos y sistemas pasivos de climatización para minimizar la huella de carbono.",
-    autor: "Marcos Torres",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo", semestre_id: "10",
-    sede: "Extensión Porlamar", sede_id: "porlamar",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    score: 95,
-    vistas: 580,
-    descargas: 231
-  },
-  {
-    id: 6,
-    slug: "centro-cultural-biblioteca-publica-diseno-parametrico",
-    titulo: "Centro Cultural y Biblioteca Pública con Diseño Paramétrico",
-    descripcion: "Diseño de un recinto público enfocado en la difusión cultural, utilizando herramientas de diseño arquitectónico generativo para optimizar iluminación natural y acústica.",
-    autor: "Valeria Guzmán",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "9no", semestre_id: "9",
-    sede: "Extensión Mérida", sede_id: "merida",
-    tipo: "Proyecto de Materia", tipo_id: "materia",
-    score: 89,
-    vistas: 320,
-    descargas: 110
-  },
-  {
-    id: 7,
-    slug: "viviendas-interes-social-modulares-expandibles",
-    titulo: "Viviendas de Interés Social Modulares y Expandibles",
-    descripcion: "Alternativa habitacional de bajo costo diseñada bajo un esquema arquitectónico modular que permite crecimiento ordenado según las necesidades del grupo familiar.",
-    autor: "Simón Andrade",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "10mo", semestre_id: "10",
-    sede: "Extensión Valencia", sede_id: "valencia",
-    tipo: "Trabajo de Grado", tipo_id: "grado",
-    score: 96,
-    vistas: 890,
-    descargas: 412
-  },
-  {
-    id: 8,
-    slug: "intervencion-paisajismo-zonas-universitarias",
-    titulo: "Intervención de Paisajismo en Zonas Universitarias Deterioradas",
-    descripcion: "Recuperación de espacios verdes dentro del campus universitario promoviendo senderos bioclimáticos, áreas de estudio al aire libre y reforestación.",
-    autor: "Ricardo Silva",
-    carrera: "Arquitectura", carrera_id: "arquitectura",
-    semestre: "8vo", semestre_id: "8",
-    sede: "Sede Principal Barcelona", sede_id: "barcelona",
-    tipo: "Servicio Comunitario", tipo_id: "comunitario",
-    score: 82,
-    vistas: 120,
-    descargas: 35
-  }
-];
+// Eliminamos los mockProjects estáticos para usar datos reales
 
 const Repository = () => {
   const location = useLocation();
+
+  const [carreras, setCarreras] = useState([]);
+  const [sedes, setSedes] = useState([]);
+
+  // Cargar metadatos desde la DB y sincronizar filtros
+  useEffect(() => {
+    const loadMetadata = async () => {
+      console.log("🔍 Cargando filtros dinámicos en Repositorio...");
+      try {
+        const [cRes, lRes] = await Promise.all([
+          supabase.from('career').select('career_id, name_career').order('name_career'),
+          supabase.from('location').select('location_id, name_location').order('name_location')
+        ]);
+        
+        let loadedCarreras = [];
+        if (cRes.data) {
+          loadedCarreras = cRes.data.map(c => ({ id: c.career_id, label: c.name_career }));
+          setCarreras(loadedCarreras);
+          
+          // SINCRONIZACIÓN DE INICIO (Home) -> REPOSITORIO
+          // Si venimos de Inicio con un slug (ej: "sistemas") pero la BD usa IDs (ej: 7)
+          if (location.state?.carreraId && typeof location.state.carreraId === 'string') {
+            const slug = location.state.carreraId.toLowerCase();
+            const matchingCareer = loadedCarreras.find(c => 
+              c.label.toLowerCase().includes(slug) || slug.includes(c.label.toLowerCase())
+            );
+            if (matchingCareer) {
+              console.log(`🎯 Sincronizado slug "${slug}" -> ID de Base de Datos: ${matchingCareer.id}`);
+              setCarrera(matchingCareer.id);
+            }
+          }
+        }
+        
+        if (lRes.data) setSedes(lRes.data.map(l => ({ id: l.location_id, label: l.name_location })));
+        console.log("✅ Filtros listos.");
+      } catch (e) {
+        console.error("Error cargando filtros:", e);
+      }
+    };
+    loadMetadata();
+  }, [location.state]); // Escuchar cambios en la navegación interna
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -243,14 +149,33 @@ const Repository = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const isFetchingRef = useRef(false);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const handleOpenUpload = () => {
     if (!user) {
-      alert("Debes iniciar sesión para subir un proyecto");
+      toast.error("Sesión requerida", {
+        description: "Debes iniciar sesión para subir un proyecto"
+      });
       navigate('/auth');
       return;
     }
     setIsUploadModalOpen(true);
+  };
+
+  // Genera un slug amigable a partir del título (igual que los mocks)
+  const toSlug = (title) => {
+    if (!title) return '';
+    return title
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar tildes
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')  // solo letras, números, guiones
+      .trim()
+      .replace(/\s+/g, '-')          // espacios -> guiones
+      .replace(/-+/g, '-');           // guiones dobles -> uno
   };
 
   // Si el usuario hace clic nuevamente en un link de Home, forzamos actualización
@@ -265,12 +190,102 @@ const Repository = () => {
     }
   }, [location.state, user]);
 
-  // Expert System (Mock Filtering Logic)
-  const filteredProjects = mockProjects.filter((project) => {
-    const matchCarrera = carrera ? project.carrera_id === carrera : true;
-    const matchSemestre = semestre ? project.semestre_id === semestre : true;
-    const matchTipo = tipo ? project.tipo_id === tipo : true;
-    const matchSede = sede ? project.sede_id === sede : true;
+  const [projectsData, setProjectsData] = useState(mockProjects);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+
+  const fetchProjects = async () => {
+    // Evitar múltiples llamadas simultáneas
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    
+    setLoadingProjects(true); 
+    console.log("🚀 Cargando proyectos...");
+
+    // Promesa de carga con timeout de 20s incorporado localmente
+    const fetchWithTimeout = async () => {
+      const projectsPromise = supabase
+        .from('projects')
+        .select(`
+          *,
+          career:career_id(name_career),
+          location:location_id(name_location),
+          profiles:user_id(full_name)
+        `)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
+
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout de red")), 20000)
+      );
+
+      return Promise.race([projectsPromise, timeoutPromise]);
+    };
+
+    try {
+      const { data, error } = await fetchWithTimeout();
+
+      if (error) throw error;
+
+      console.log(`✅ ÉXITO: Recibidos ${data.length} proyectos.`);
+
+      const mappedProjects = data.map((p) => ({
+        id: p.id,          // UUID real para llamadas a Supabase
+        slug: toSlug(p.title) || p.id,  // Slug legible para la URL
+        titulo: p.title,
+        descripcion: p.description,
+        autor: p.profiles?.full_name || 'Enviado por residente',
+        carrera: p.career?.name_career || 'Carrera no especificada',
+        carrera_id: Number(p.career_id),
+        semestre: `${p.semester}° Semestre`,
+        semestre_id: p.semester?.toString(),
+        sede: p.location?.name_location || 'Sede no especificada',
+        sede_id: Number(p.location_id),
+        tipo: TIPOS.find(t => t.id === p.project_type)?.label || p.project_type,
+        tipo_id: p.project_type,
+        vistas: p.views_count || 0,
+        descargas: p.downloads_count || 0,
+        score: p.score || 85
+      }));
+      
+      setProjectsData([...mappedProjects, ...mockProjects]);
+    } catch (err) {
+      console.warn('🟡 Usando fallback por lentitud o error:', err.message);
+      setProjectsData(mockProjects);
+    } finally {
+      setLoadingProjects(false);
+      isFetchingRef.current = false;
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [user]); // Se dispara al montar y cuando el usuario cambie
+
+  // Sistema de Filtrado Experto (Lógica Inteligente: vincula IDs numéricos con Slugs de texto)
+  const filteredProjects = projectsData.filter((project) => {
+    // Filtro Carrera: coincide por ID exacto O por nombre parcial (para Mocks)
+    const matchCarrera = carrera ? (
+      project.carrera_id === carrera || 
+      (typeof project.carrera_id === 'string' && carreras.find(c => c.id === carrera)?.label.toLowerCase().includes(project.carrera_id))
+    ) : true;
+
+    // Filtro Semestre: coincidencia de valor o string
+    const matchSemestre = semestre ? (
+      project.semestre_id == semestre || 
+      project.semestre_id === semestre?.toString()
+    ) : true;
+
+    // Filtro Tipo: los slugs suelen coincidir ('grado', 'investigacion', etc.)
+    const matchTipo = tipo ? (
+      project.tipo_id === tipo ||
+      project.tipo_id === tipo?.toString()
+    ) : true;
+
+    // Filtro Sede: coincide por ID exacto O por nombre parcial (para Mocks)
+    const matchSede = sede ? (
+      project.sede_id === sede ||
+      (typeof project.sede_id === 'string' && sedes.find(s => s.id === sede)?.label.toLowerCase().includes(project.sede_id))
+    ) : true;
     
     const searchLower = searchQuery.toLowerCase();
     const matchSearch = searchQuery 
@@ -279,6 +294,11 @@ const Repository = () => {
 
     return matchCarrera && matchSemestre && matchTipo && matchSede && matchSearch;
   });
+
+  // Reset to page 1 when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [carrera, semestre, tipo, sede, searchQuery]);
 
   const suggestions = [
     "Sistema de Gestión de Inventario",
@@ -370,7 +390,7 @@ const Repository = () => {
             <CustomDropdown 
               icon={BookOpen} 
               defaultLabel="Todas las Carreras" 
-              options={CARRERAS} 
+              options={carreras} 
               value={carrera} 
               onChange={setCarrera} 
             />
@@ -391,7 +411,7 @@ const Repository = () => {
             <CustomDropdown 
               icon={MapPin} 
               defaultLabel="Todas las Sedes" 
-              options={SEDES} 
+              options={sedes} 
               value={sede} 
               onChange={setSede} 
             />
@@ -432,10 +452,18 @@ const Repository = () => {
         
         {/* ProjectCards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.length > 0 ? (
-            filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))
+          {loadingProjects ? (
+            <div className="col-span-full py-20 text-center">
+              <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Cargando repositorios...</h3>
+              <p className="text-gray-500 dark:text-gray-400">Conectando con la base de datos.</p>
+            </div>
+          ) : filteredProjects.length > 0 ? (
+            filteredProjects
+              .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+              .map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))
           ) : (
             <div className="col-span-full py-20 text-center">
               <BookOpen className="w-16 h-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
@@ -444,14 +472,65 @@ const Repository = () => {
             </div>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {!loadingProjects && filteredProjects.length > itemsPerPage && (
+          <div className="mt-12 mb-8 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setCurrentPage(prev => Math.max(1, prev - 1));
+                  window.scrollTo({ top: 600, behavior: 'smooth' });
+                }}
+                disabled={currentPage === 1}
+                className="p-2 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 disabled:opacity-30 disabled:hover:bg-transparent transition-all shadow-sm"
+              >
+                <ChevronDown className="w-6 h-6 rotate-90" />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {[...Array(Math.ceil(filteredProjects.length / itemsPerPage))].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => {
+                      setCurrentPage(i + 1);
+                      window.scrollTo({ top: 600, behavior: 'smooth' });
+                    }}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
+                      currentPage === i + 1
+                        ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/30'
+                        : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-primary-500/50'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  setCurrentPage(prev => Math.min(Math.ceil(filteredProjects.length / itemsPerPage), prev + 1));
+                  window.scrollTo({ top: 600, behavior: 'smooth' });
+                }}
+                disabled={currentPage === Math.ceil(filteredProjects.length / itemsPerPage)}
+                className="p-2 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 disabled:opacity-30 disabled:hover:bg-transparent transition-all shadow-sm"
+              >
+                <ChevronDown className="w-6 h-6 -rotate-90" />
+              </button>
+            </div>
+            <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+              Página {currentPage} de {Math.ceil(filteredProjects.length / itemsPerPage)}
+            </p>
+          </div>
+        )}
       </div>
 
       <UploadModal 
         isOpen={isUploadModalOpen} 
         onClose={() => setIsUploadModalOpen(false)}
         onSuccess={() => {
-          // Aquí podríamos recargar los proyectos cuando sean reales
-          console.log("Proyecto subido con éxito");
+          console.log("Proyecto subido con éxito - refrescando lista");
+          fetchProjects(); // Recarga en vivo la nueva fila!
         }}
       />
     </div>

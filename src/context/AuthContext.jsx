@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         }
         setUser(session?.user ?? null);
         if (session?.user) {
-          await fetchProfile(session.user.id);
+          fetchProfile(session.user.id, session.user); // No esperar al perfil para desbloquear el resto
         }
       } catch (err) {
         console.error("Error crítico en getSession:", err);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        await fetchProfile(session.user.id);
+        fetchProfile(session.user.id, session.user); // Carga asíncrona no bloqueante
       } else {
         setProfile(null);
       }
@@ -56,27 +56,30 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const fetchProfile = async (userId) => {
+  const fetchProfile = async (userId, userAuth = null) => {
     try {
+      // 1. Prioridad: Metadatos del usuario (esto es instantáneo y viene en la sesión)
+      const meta = userAuth?.user_metadata;
+      console.log(meta);
+      if (meta && !profile) {
+        setProfile({
+          full_name: meta.full_name || 'Usuario',
+          career: meta.career || '',
+          location: meta.location || ''
+          // role NO se setea desde metadata — siempre viene de la tabla profiles (BD)
+        });
+      }
+
+      // 2. Carga desde la tabla 'profiles' (datos oficiales y roles)
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', userId)
+        .eq('user_id', userId) // Cambiado de 'id' a 'user_id' para coincidir con tu SQL
         .single();
-      
+
       if (error) {
-        console.warn("No se pudo cargar el perfil (puede que la tabla no exista aún):", error.message);
-        // Usar metadatos del usuario como fallback
-        const meta = (await supabase.auth.getUser())?.data?.user?.user_metadata;
-        if (meta) {
-          setProfile({
-            full_name: meta.full_name || 'Usuario',
-            career: meta.career || '',
-            location: meta.location || '',
-            role: 'student'
-          });
-        }
-      } else {
+        console.warn("Perfil BD no encontrado, manteniendo metadatos:", error.message);
+      } else if (data) {
         setProfile(data);
       }
     } catch (err) {
@@ -89,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       // 1. Limpiar estados de React inmediatamente
       setUser(null);
       setProfile(null);
-      
+
       // 2. Intentar cierre de sesión oficial en el servidor
       await supabase.auth.signOut();
     } catch (err) {
@@ -107,7 +110,7 @@ export const AuthProvider = ({ children }) => {
       } catch (e) {
         console.error("Error limpiando localStorage", e);
       }
-      
+
       // 4. Redirigir limpiamente sin afectar el historial
       window.location.replace('/');
     }

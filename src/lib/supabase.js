@@ -12,4 +12,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder');
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co', 
+  supabaseAnonKey || 'placeholder',
+  {
+    auth: {
+      persistSession: true, // Reactivado para mantener sesión en móviles y escritorio
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
