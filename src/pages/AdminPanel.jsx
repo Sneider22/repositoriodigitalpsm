@@ -208,7 +208,7 @@ const AdminPanel = () => {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex gap-1 mb-6 border-b border-gray-200 dark:border-gray-800 overflow-x-auto hide-scrollbar whitespace-nowrap">
           {STATUS_TABS.map(({ key, label, icon: Icon, color }) => {
             const isActive = activeTab === key;
             const cls = tabClasses[color];
@@ -216,9 +216,9 @@ const AdminPanel = () => {
               <button
                 key={key}
                 onClick={() => handleTabChange(key)}
-                className={`flex items-center gap-1.5 px-4 py-3 text-sm font-bold border-b-2 transition-colors -mb-px ${isActive
-                    ? cls.active + ' bg-transparent'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-3 text-sm font-bold border-b-2 transition-colors -mb-px shrink-0 ${isActive
+                  ? cls.active + ' bg-transparent'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                   }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? cls.icon : ''}`} />
