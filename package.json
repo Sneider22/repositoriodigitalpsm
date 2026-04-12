@@ -11,10 +11,13 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.100.1",
     "component": "^1.1.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "lucide-react": "^0.400.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.13.1"
+    "react-router-dom": "^7.13.1",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
