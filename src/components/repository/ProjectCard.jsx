@@ -1,8 +1,20 @@
 import React from 'react';
 import { MapPin, BookOpen, FileText, User, ChevronRight, Award, Eye, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { calculateIRA } from '../../utils/expertSystem';
 
 const ProjectCard = ({ project }) => {
+  const calculatedScore = calculateIRA({
+    type: project.tipo,
+    downloads: project.descargas,
+    views: project.vistas,
+    year: project.ano_publicacion || (project.created_at ? new Date(project.created_at).getFullYear() : new Date().getFullYear()),
+    semester: project.semestre_id,
+    career: project.carrera, // Usamos el nombre descriptivo en vez del ID numérico para que el experto haga el match
+    title: project.titulo,
+    summary: project.descripcion
+  });
+
   return (
     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl dark:hover:shadow-[0_10px_40px_-15px_rgba(255,255,255,0.15)] hover:-translate-y-1.5 hover:border-primary-500/30 transition-all duration-300 group flex flex-col h-full relative overflow-hidden">
       
@@ -18,7 +30,7 @@ const ProjectCard = ({ project }) => {
         {/* Badge del Motor de Inferencia */}
         <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1.5 rounded-lg text-xs font-extrabold shadow-sm border border-amber-100 dark:border-amber-800/50" title="Relevancia según Sistema Experto">
           <Award className="w-4 h-4 fill-amber-500/20" />
-          {project.score}% Puntaje
+          {calculatedScore}% Puntaje
         </div>
       </div>
 
@@ -51,8 +63,12 @@ const ProjectCard = ({ project }) => {
 
       <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-xs font-semibold">
-          <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Eye className="w-4 h-4"/> {project.vistas}</div>
-          <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Download className="w-4 h-4"/> {project.descargas}</div>
+          {project.vistas !== undefined && (
+            <>
+              <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Eye className="w-4 h-4"/> {project.vistas}</div>
+              <div className="flex items-center gap-1.5 hover:text-primary-500 transition-colors cursor-default"><Download className="w-4 h-4"/> {project.descargas}</div>
+            </>
+          )}
         </div>
         <Link to={`/repositorios/proyecto/${project.slug}`} className="flex items-center gap-1 text-sm font-extrabold text-primary-600 dark:text-primary-400 group-hover:underline group-hover:translate-x-1 transition-transform">
           Ver Detalles <ChevronRight className="w-4 h-4" />
