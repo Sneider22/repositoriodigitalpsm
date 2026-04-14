@@ -96,27 +96,26 @@ Cada factor del proyecto es normalizado a una escala del 0 a 100 y multiplicado 
   <img src="public/screenshots/inicio.jpg" alt="Inicio" width="80%" style="border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
 </div>
 
-<br><br>
+<br>
 
 <div align="center">
   <b>2. Motor Experto en Acción</b><br><br>
   <img src="public/screenshots/repositorios.jpg" alt="Repositorios y Scoring" width="80%" style="border-radius: 10px;">
 </div>
 
-<br><br>
+<br>
 
 <div align="center">
   <b>3. Ficha Técnica General</b><br><br>
   <img src="public/screenshots/detalle1.jpg" alt="Ficha del Proyecto" width="80%" style="border-radius: 10px;">
 </div>
 
-<br><br>
+<br>
 
 <div align="center">
   <b>4. Anexos y Previsualización Funcional</b><br><br>
   <img src="public/screenshots/detalle2.jpg" alt="Visualización de anexo" width="80%" style="border-radius: 15px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);">
 </div>
-
 
 ---
 
