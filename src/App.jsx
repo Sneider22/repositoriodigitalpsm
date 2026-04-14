@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 
@@ -9,9 +10,10 @@ import Repository from './pages/Repository'
 import Info from './pages/Info'
 import ProjectDetail from './pages/ProjectDetail'
 import Auth from './pages/Auth'
+import AdminPanel from './pages/AdminPanel'
+import MyProjects from './pages/MyProjects'
 
 import { AuthProvider, useAuth } from './context/AuthContext'
-import { Loader2 } from 'lucide-react'
 
 // Utilidad nativa de React Router para reiniciar el Scroll a tope de página
 const ScrollToTop = () => {
@@ -31,15 +33,6 @@ const ScrollToTop = () => {
 const AppContent = () => {
   const { loading } = useAuth();
   
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-primary-600 animate-spin" />
-        <p className="mt-4 text-gray-500 font-medium animate-pulse">Cargando repositorio...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col font-sans transition-colors duration-200">
       <Navbar />
@@ -51,6 +44,8 @@ const AppContent = () => {
           <Route path="/repositorios/proyecto/:slug" element={<ProjectDetail />} />
           <Route path="/info" element={<Info />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/mis-proyectos" element={<MyProjects />} />
         </Routes>
       </main>
       
@@ -62,6 +57,7 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-center" richColors closeButton />
       <Router>
         <ScrollToTop />
         <AppContent />

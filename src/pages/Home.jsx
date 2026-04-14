@@ -160,7 +160,7 @@ const Home = () => {
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-4 max-w-4xl mx-auto">
-            { [
+            {[
               { id: "arquitectura", label: "Arquitectura" },
               { id: "civil", label: "Ing. Civil" },
               { id: "electrica", label: "Ing. Eléctrica" },
