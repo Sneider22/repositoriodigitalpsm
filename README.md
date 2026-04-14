@@ -91,28 +91,32 @@ Cada factor del proyecto es normalizado a una escala del 0 a 100 y multiplicado 
 
 ## 📸 Interfaz y Experiencia de Usuario (UI/UX)
 
-<div align="center">
-  <b>1. Pantalla de Inicio y Dashboard</b><br/>
-  <img src="public/screenshots/inicio.jpg" alt="Inicio" width="100%" style="border-radius: 15px; margin-top: 10px; margin-bottom: 20px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);" />
-</div>
-
 <table align="center" width="100%" border="0" style="border: none;">
   <tr>
+    <td width="50%" align="center">
+      <b>1. Pantalla de Inicio y Dashboard</b><br/>
+  <img src="public/screenshots/inicio.jpg" alt="Inicio" width="100%" style="border-radius: 15px; margin-top: 10px; margin-bottom: 20px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);" />
+    </td>
     <td width="50%" align="center">
       <b>2. Motor Experto en Acción</b><br/>
       <img src="public/screenshots/repositorios.jpg" alt="Repositorios y Scoring" width="100%" style="border-radius: 10px; margin-top: 10px;" />
     </td>
+  </tr>
+</table>
+
+<table align="center" width="100%" border="0" style="border: none;">
+  <tr>
     <td width="50%" align="center">
       <b>3. Ficha Técnica General</b><br/>
       <img src="public/screenshots/detalle1.jpg" alt="Ficha del Proyecto" width="100%" style="border-radius: 10px; margin-top: 10px;" />
     </td>
+    <td width="50%" align="center">
+      <b>4. Anexos y Previsualización Funcional</b><br/>
+  <img src="public/screenshots/detalle2.jpg" alt="Visualización de anexo" width="100%" style="border-radius: 15px; margin-top: 10px; margin-bottom: 20px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);" />
+    </td>
   </tr>
 </table>
 
-<div align="center">
-  <b>4. Anexos y Previsualización Funcional</b><br/>
-  <img src="public/screenshots/detalle2.jpg" alt="Visualización de anexo" width="100%" style="border-radius: 15px; margin-top: 10px; margin-bottom: 20px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3);" />
-</div>
 
 ---
 
