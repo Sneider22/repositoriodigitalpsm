@@ -1,8 +1,7 @@
-<div align="center">
+<div align="center" style="margin-bottom: 20px;">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=008080&height=200&section=header&text=Repositorio%20Digital%20PSM&fontSize=50&fontColor=ffffff&animation=fadeIn" />
 
-  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" alt="Running Pikachu" width="60" />
-  <h1 align="center">Repositorio Digital PSM 🎓🏢</h1>
+  <h1 align="center">🎓 Repositorio Digital PSM 🏢</h1>
 
   <p align="center">
     <strong>Plataforma inteligente y profesional diseñada para centralizar, preservar y difundir el conocimiento académico generado por la comunidad del <em>Politécnico Santiago Mariño</em>.</strong>
@@ -14,14 +13,20 @@
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
     </a>
-    <a href="https://tailwindcss.com/">
+    <a href="https://vitejs.dev/">
+      <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+    </a>
+        <a href="https://tailwindcss.com/">
       <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    </a>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">
+      <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" alt="JavaScript" />
     </a>
     <a href="https://supabase.com/">
       <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
     </a>
-    <a href="https://vitejs.dev/">
-      <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+    <a href="https://www.postgresql.org/">
+      <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
     </a>
   </p>
 </div>
@@ -40,40 +45,59 @@ Este sistema permite a los estudiantes registrar sus proyectos de grado, pasant�
 
 ---
 
+## 📐 Sistema Experto: El Índice de Relevancia Académica (IRA)
+
+El núcleo funcional y la innovación principal de esta arquitectura es el **Motor de Inferencia Experto**. Este motor se encarga de calcular matemáticamente el *IRA*, un algoritmo que jerarquiza autónomamente los proyectos basándose en un Modelo de Suma Ponderada (*Weighted Sum Model*).
+
+### La Fórmula Maestra
+```math
+IRA = (Wt \times T) + (Wp \times P) + (Wv \times V) + (Ws \times S) + (Wk \times K)
+```
+
+### Ponderación de Variables
+Cada factor del proyecto es normalizado a una escala del 0 a 100 y multiplicado por su peso algorítmico asignado:
+
+- 📊 **( T ) Rigor (30%):** Basado en la jerarquía documental.
+- 📈 **( P ) Impacto (25%):** Heurística compensada basada en descargas (con alto peso) y visualizaciones.
+- ⏳ **( V ) Recencia (15%):** Penalización estandarizada por años de antigüedad.
+- 🎓 **( S ) Afinidad (15%):** Evaluando el nivel de madurez académica según el semestre del responsable.
+- 🧠 **( K ) Coincidencia Semántica (15%):** Inteligencia basada en *Fuzzy Matching* sobre diccionarios técnicos especializados propios de cada carrera de ingeniería.
+
+*(Incluye penalizaciones Heurísticas de "Low-Effort" / Anti-Spam para descripciones vacías o poco profesionales)*.
+
+---
+
 ## ✨ Características Principales
 
 ### 1. Ecosistema de Autenticación Unificado
-- Gestión de roles (Estudiante/Administrador).
-- Verificación por correo institucional integrada.
-- Perfiles de usuario reactivos en el Navbar.
+- Gestión de roles (Estudiante / Administrador).
+- Perfiles de usuario reactivos en la barra de navegación.
 
-### 2. Motor de Exploración Inteligente (IRA) 🤖
-Un algoritmo de recomendación matemática basado en **Weighted Sum Model** que jerarquiza los proyectos evaluando:
-- Filtros avanzados por Carrera, Semestre, Sede y Tipo de Proyecto.
-- Previsualización dinámica de tarjetas con metadatos académicos.
-- **Semántica inteligente por carrera** (Inferencia de vocabulario tecnológico).
+### 2. Motor de Exploración Inteligente
+- Ordenamiento y filtrado avanzado impulsado por el algoritmo **IRA**.
+- Búsqueda filtrada por Carrera, Semestre, Sede y Tipo de Proyecto.
+- Previsualización dinámica de tarjetas con metadatos y puntaje analítico incrustado.
 
 ### 3. Visualización Inmersiva
 - Galería multimedia optimizada con sistema Lightbox (estilo Instagram).
-- Sección de archivos compacta y profesional.
-- Adaptabilidad total: Centrado ergonómico en móviles y flujo lateral en desktop.
+- Sección de archivos compacta y enfocada en descargas directas.
+- Adaptabilidad total: Centrado ergonómico en móviles y flujo de tarjetas en rejilla para desktop.
 
 ### 4. Moderación y Calidad 🛡️
-- Flujo de aprobación donde el administrador valida cada entrega antes de su publicación general.
-- Aprobación o Rechazo con etiquetas heurísticas Anti-Spam derivadas del Motor de Inferencia.
+- Panel donde el Administrador valida y audita cada entrega antes de publicarse en la red general.
+- Clasificación visual e indicadores de advertencia impulsados por el motor de inferencia.
 
 ---
 
 ## 📋 Cualidades Técnicas
 - **Diseño Glassmorphism & Modo Oscuro:** Interfaz optimizada para reducir la fatiga visual.
-- **Arquitectura de Contexto:** Manejo de sesiones y estados mediante AuthContext de React.
-- **SEO Ready:** Optimización de etiquetas semánticas y jerarquía de encabezados.
-- **Escalabilidad:** Preparado para integrarse con sistemas de almacenamiento masivo (Supabase Buckets).
+- **Arquitectura de Contexto:** Manejo ágil de sesiones mediante `AuthContext`.
+- **Componentización Sólida:** Creación de utilities puros en JavaScript (`expertSystem.js`) separando lógica pesada de las vistas en React.
 
 <div align="center">
   <br/>
-  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/6.gif" alt="Charizard" width="80" />
+  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/7.gif" alt="Squirtle Corriendo" width="60" />
+  <br/><br/>
   <p>© 2026 - Repositorio Digital PSM. Todos los derechos reservados.</p>
   <img src="https://capsule-render.vercel.app/api?type=waving&color=008080&height=100&section=footer" />
 </div>
-
