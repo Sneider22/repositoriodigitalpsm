@@ -97,6 +97,8 @@ Cada factor del proyecto es normalizado a una escala del 0 a 100 y multiplicado 
 <div align="center">
   <br/>
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/7.gif" alt="Squirtle Corriendo" width="60" />
+   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/7.gif" alt="Squirtle Corriendo" width="60" />
+   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/7.gif" alt="Squirtle Corriendo" width="60" />
   <br/><br/>
   <p>© 2026 - Repositorio Digital PSM. Todos los derechos reservados.</p>
   <img src="https://capsule-render.vercel.app/api?type=waving&color=008080&height=100&section=footer" />
