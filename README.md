@@ -83,7 +83,7 @@ Cada factor del proyecto es normalizado a una escala del 0 a 100 y multiplicado 
 - Sección de archivos compacta y enfocada en descargas directas.
 - Adaptabilidad total: Centrado ergonómico en móviles y flujo de tarjetas en rejilla para desktop.
 
-### 4. Moderación y Calidad 🛡️
+### 4. Moderación y Calidad 
 - Panel donde el Administrador valida y audita cada entrega antes de publicarse en la red general.
 - Clasificación visual e indicadores de advertencia impulsados por el motor de inferencia.
 
