@@ -6,7 +6,7 @@
   <p align="center">
     <strong>Plataforma inteligente y profesional diseñada para centralizar, preservar y difundir el conocimiento académico generado por la comunidad del <em>Politécnico Santiago Mariño</em>.</strong>
     <br />
-    <em>Tesis de Grado - Ingeniería de Sistemas</em>
+    <em>Trabajo de Grado - Ingeniería de Sistemas</em>
   </p>
 
   <p align="center">
